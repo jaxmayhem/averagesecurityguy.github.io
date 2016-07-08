@@ -1,0 +1,44 @@
+---
+layout: post
+title: User Enumeration Is A Big Deal
+date: 2014-06-12 11:30:39.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Pentest
+- Thoughts
+- Web App Testing
+tags:
+- Bug Bounties
+- BugCrowd
+- Enumeration
+- usernames
+- Web App Testing
+meta:
+  _edit_last: '20119316'
+  geo_public: '0'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  publicize_twitter_url: http://t.co/RsJIddX3Pl
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  publicize_linkedin_url: http://www.linkedin.com/updates?discuss=&scope=45960739&stype=M&topic=5882876492483936256&type=U&a=zqlh
+  _wpas_done_648455: '1'
+  _wpas_skip_648456: '1'
+  _wpas_skip_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I've been participating in bug bounties with <a href="https://bugcrowd.com" title="BugCrowd bug bounties">BugCrowd</a> and one of the first things I check for is username/email enumeration on the login page and the forgotten password page. Some of the companies running the bug bounties explicitly state that they will not pay for user enumeration vulnerabilities. These companies feel username/email enumeration is a low-risk vulnerability because Phishers target large groups of email addresses instead of email addresses associated with a particular target. In addition, they feel it is low-risk because they believe the account lockout policies they have in place will protect them from password attacks. Unfortunately, neither of these assumptions are correct.</p>
+<p>Spammers typically send messages indiscriminantly while phishers typically send their messages to a specific set of targets. As an attacker if I can use your login or forgotten password page to narrow my list from 10000 targets to 1000 targets, I will.</p>
+<p>While account lockout policies are a good thing and can prevent certain password guessing attacks they can also be worked around with proper timing. Also, depending on how long the account lockout lasts and whether the account must manually be reset, an attacker could easily cause a DoS for your users or your helpdesk personnel.</p>
+<p>Finally, an attacker with a large enough set of valid email addresses would only need to try three or four common passwords with each email address to gain access to a significant number of accounts. These three or four failed password attempts will typically not trigger an account lockout.</p>
+<p>Username/email enumeration is not the end of the world but it is certainly something that should be fixed and is typically easy to fix. When a user fails to login, don't tell the user whether the username or the password failed. Simply say the login attempt failed. When a user submits their username/email to the forgotten password form don't tell them whether the username/email was found or not. Simply tell them that an email is on the way.</p>
+<p>UPDATE 6/13/2014:<br />
+A couple of people on Twitter pointed out that there will always be at least one username enumeration vulnerability on sites where users self-register. That vulnerability will be in the account creation process. Another user said this vulnerability is not preventable without ruining the user experience. I'm not a UX guru so I have no idea whether this is true or not.</p>
+<p>In either case, the danger of username enumeration comes from the fact that an attacker is able to gather one of the two pieces of information needed to login to the site. If we cannot prevent an attacker from getting half of the login information maybe the answer is to require more login information, ie multi-factor authentication. With proper multi-factor authentication you still run the risk of creating a denial of service by locking out accounts but you eliminate the more dangerous vulnerability of user accounts being compromised on a massive scale.</p>

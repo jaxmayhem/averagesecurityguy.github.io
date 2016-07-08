@@ -1,0 +1,55 @@
+---
+layout: post
+title: Hunting for Artifacts with Metasploit
+date: 2012-01-30 11:00:33.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Metasploit
+- Pentest
+tags:
+- artifacts
+- metasploit
+- post exploitation
+meta:
+  _edit_last: '20119316'
+  publicize_results: a:1:{s:7:"twitter";a:1:{i:244128388;a:2:{s:7:"user_id";s:13:"averagesecguy";s:7:"post_id";s:18:"164016122537050112";}}}
+  _wpas_done_linkedin: '1'
+  _wpas_done_twitter: '1'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1368037079;}
+  _oembed_9e5e2b4bb277c04a63cc7b205ebd58e9: '{{unknown}}'
+  _oembed_19ffc919a49d4d4639dccc081aa91be0: '{{unknown}}'
+  _oembed_2f74aa606c8519aeebf61212174b1e7b: '{{unknown}}'
+  _oembed_1846a9ca1a052782227aeb9787562492: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>A while back my boss, <a href="http://twitter.com/BillDeanCCE" title="BillDeanCCE twitter feed">@BillDeanCCE</a>, was looking for a way to check a machine for evidence of a compromise. He wanted to find files in specific locations with specific md5 checksums and wanted to find specific registry keys matching a particular value. I spent some time mulling this over and finally created a <a href="https://github.com/rapid7/metasploit-framework/blob/master/modules/post/windows/gather/enum_artifacts.rb" title="metasploit post module enum_artifacts">metasploit post module</a> to do it.</p>
+<p>First, obtain a meterpreter or shell session and load the module using <code>use post/windows/gather/enum_artifacts</code>. </p>
+<p>Next, specify a configuration file containing the artifacts you want to find. The configuration file is written using <a href="http://www.yaml.org/" title="The official YAML web site.">YAML</a> syntax and should be in the following format:</p>
+<pre>
+---
+test_evidence:  # What the artifacts below are related to.
+ files:
+  - name: c:\ntdetect.com                  # File to find.
+    csum: b2de3452de03674c6cec68b8c8ce7c78 # MD5 checksum.
+  - name: c:\boot.ini
+    csum: fa579938b0733b87066546afe951082c
+
+ reg_entries:
+  - key: HKEY_LOCAL_MACHINE\SYSTEM\Select  # Registry key
+    val: Current                           # Value
+    data: 1                                # Data
+  - key: HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Services\ACPI
+    val: DisplayName
+    data: Microsoft ACPI Driver
+</pre>
+<p>Finally, run the enum_artifacts post module and it will search the computer in the specified session for any of the artifacts in the configuration file. Any matches are stored in the loot for later processing. </p>
+<p>A default configuration file is included with Metasploit and located at <code>data/post/enum_artifacts_list.txt</code>. Currently, the configuration file contains only a couple of test artifacts, which were used to ensure the module worked properly. I would like to see the community get together and add artifacts to this file, artifacts that could allow pentesters to identify malware infections, installed software, or any number of other things.</p>
+<p>If you have any questions or comments about this module or suggestions for improvements, please let me know.</p>

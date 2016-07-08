@@ -1,0 +1,36 @@
+---
+layout: post
+title: LinkedIn, Are You Kidding Me?
+date: 2012-06-08 07:43:05.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Thoughts
+tags:
+- Infosec problems
+- infosec thoughts
+- thoughts
+meta:
+  _edit_last: '20119316'
+  _wp_old_slug: linkedin_are_youkidding-me
+  _wpas_done_twitter: '1'
+  _wpas_skip_linkedin: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>This Linkedin security breach has put me in a foul mood. I can't decide if these developers were lazy or stupid. Right now, I'm inclined to believe they are both. The dangers of unsalted password hashes have been <a href="http://www.faqs.org/faqs/kerberos-faq/general/section-25.html" title="Kerboros FAQ - Salted Password Hashes." target="_blank">known for many years</a>. A quick Google search will show you this <a href="http://www.aspheute.com/english/20040105.asp" title="Storing Passwords - done right" target="_blank">article from 2004</a> that explains why salting is important and even gives you code to do the salting. There is absolutely no excuse for any web developer anywhere in the world to store plaintext, or unsalted password hashes, period.</p>
+<p>The best part of this breach is LinkedIn's own blog. My favorite quote:</p>
+<blockquote><p>It is worth noting that the affected members who update their passwords and members whose passwords have not been compromised benefit from the enhanced security we just recently put in place, which includes hashing and salting of our current password databases.</p></blockquote>
+<p>It's not enhanced security. It is the most basic thing you can do to protect your customer's data. It costs next to nothing to add salted password hashes to a database. If LinkedIn can't be trusted to protect your data at such a low cost, what can they be trusted with?</p>
+<p>I also love this line:</p>
+<blockquote><p>To the best of our knowledge, no email logins associated with the passwords have been published...</p></blockquote>
+<p>Don't get too excited about the email addresses not being published and lose sight of the fact that they were stolen in the first place. </p>
+<p>Here is another gem:</p>
+<blockquote><p>...nor have we received any verified reports of unauthorized access to any member’s account as a result of this event.</p></blockquote>
+<p>Just thinking out loud here, but if someone broke into LinkedIn's database months ago and stole the passwords and LinkedIn didn't know about it until the passwords were published, do you think LinkedIn is qualified to determine if any unauthorized access has taken place? Let that sink in for a minute.</p>
+<p>I don't usually rant like this but I'm so tired of seeing stupid security mistakes. Everyone worries about advanced persistent threats (APT), which account for maybe 1 in 100 data breaches. The other 99 data breaches occur because people aren't doing Information Security 101.</p>

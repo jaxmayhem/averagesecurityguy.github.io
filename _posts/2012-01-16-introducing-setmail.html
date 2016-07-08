@@ -1,0 +1,49 @@
+---
+layout: post
+title: Introducing SETmail
+date: 2012-01-16 10:17:58.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Social Engineering
+tags:
+- Social Engineering
+- Social Engineering Toolkit
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1368037091;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I have wanted to use the Social Engineering Toolkit for quite a while but didn't want to setup Sendmail. I know you can use a gmail account but I wanted to spoof an address and Sendmail was the only option until now. I built a ruby script to implement an open relay that can be used with SET. I used code from <a href="https://github.com/aarongough/mini-smtp-server" title="mini smtp server on github">here</a> and <a href="https://github.com/ambethia/smtp-tls/blob/master/lib/smtp-tls.rb" title="smtp-tls on Github">here</a> to get started.</p>
+<p>To use SETmail you need to <a href="http://www.social-engineer.org/framework/Computer_Based_Social_Engineering_Tools:_Social_Engineer_Toolkit_%28SET%29#Beginning_with_the_Social_Engineer_Toolkit" title="configure social engineering toolkit">configure SET to use Sendmail.</a> After that, run the SETmail script, which will start an SMTP server on port 25 on the localhost.</p>
+<p>Next, go through the SET menu until you get to </p>
+<pre>[-] Sendmail is a Linux based SMTP Server, this can be used to spoof email addresses.
+[-] Sendmail can take up to three minutes to start FYI.
+[*] Sendmail is set to ON
+set:phishing&gt; Start Sendmail? [yes|no]:
+</pre>
+<p>Do not start Sendmail. Answer a few more questions and you will get here.</p>
+<pre>
+set:phishing&gt; Send email to:stephen@averagesecurityguy.info
+
+  1. Use a gmail Account for your email attack.
+  2. Use your own server or open relay
+
+set:phishing&gt;2
+set:phishing&gt; From address (ex: moo@example.com):stephen@averagesecurityguy.net
+set:phishing&gt; Username for open-relay [blank]:  
+Password for open-relay [blank]: 
+set:phishing&gt; SMTP email server address (ex. smtp.youremailserveryouown.com):127.0.0.1
+set:phishing&gt; Port number for the SMTP server [25]:
+set:phishing&gt; Flag this message/s as high priority? [yes|no]:no
+</pre>
+<p>After that your email will be sent.</p>
+<p>If you want to bypass spam filters with your custom domain name, you will need to setup an MX and SPF record for your custom domain.</p>
+<p>You can get SETmail <a href="https://github.com/averagesecurityguy/scripts/blob/master/setmail.rb" title="setmail on github">here</a>.</p>

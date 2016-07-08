@@ -1,0 +1,49 @@
+---
+layout: post
+title: A Series of Unfortunate Events
+date: 2012-05-28 10:27:57.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Pentest
+tags:
+- penetration testing
+meta:
+  _edit_last: '20119316'
+  _wpas_done_linkedin: '1'
+  publicize_results: a:1:{s:7:"twitter";a:1:{i:244128388;a:2:{s:7:"user_id";s:13:"averagesecguy";s:7:"post_id";s:18:"207311550816595970";}}}
+  _wpas_done_twitter: '1'
+  _oembed_aff65f7a851e3a0321cace6fc08ad645: '{{unknown}}'
+  _oembed_e73b49fd2510cfe166df63ba8a744814: '{{unknown}}'
+  _oembed_126058a68b41d0cdee2c806e8bdfaf16: '{{unknown}}'
+  _oembed_1323db0880f390986b8c3fcd1688a785: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>When people demonstrate penetration testing they always show the easy exploits like MS08-067 or the Apache Tomcat WAR upload, both of which are in Metasploit. While I still see these exploits available in the networks I pentest, most of the time exploitation is a lot more difficult than simply "popping a shell." One of my recent pentests shows this clearly.</p>
+<h3>Unauthenticated NFS Access</h3>
+<p>First, I scanned the network with Nessus and did not find any easily exploited vulnerabilities but I did find a medium-risk vulnerability showing unauthenticated access to multiple NFS shares (Nessus ID 42256). Browsing the shares I found a backup copy of the client's public web site, which was developed using Visual Studio. Visual Studio stores database connection strings, including plaintext passwords, in .config files. Using the command <code>grep -r connectionStrings= *</code> at the root of the source directory, I found multiple connection strings that used three different database passwords.</p>
+<h3>Windows SMB Null Sessions</h3>
+<p>The Nessus scan also identified two machines that allowed unauthenticated user enumeration using the host security identifier (SID) (Nessus ID 56211). Using this medium-risk vulnerability, I determined the local administrator account had been renamed.</p>
+<h3>Password Reuse</h3>
+<p>Next, I used Metasploit's smb_login auxiliary module, <code>use auxiliary/scanner/smb/smb_login</code>, along with the local administrator account and the three passwords identified in the web application source code to identify any instances of password reuse. Luckily, there were two machines that allowed local administrator access with one of the passwords I found.</p>
+<h3>Complete Trust in AV</h3>
+<p>Next, I used Metasploit's psexec exploit module, <code>use exploit/windows/smb/psexec</code>, along with the local administrator username and password to attempt to get meterpreter access to the box. When I tried to run the exploit, I lost the network connection to the box. After a few minutes, the network connection was restored and I was able to try to exploit the box again. I determined the client's AV was flagging my attack and temporarily blocking my network connection.</p>
+<p>For my second exploit attempt, I created a custom executable using <code>msfvenom</code>, this was also caught by the client's AV. Since I was unable to bypass the AV with <code>msfvenom</code>, I resorted to using a <a href="http://github.com/averagesecurityguy/scripts" title="AverageSecurityGuy scripts on github.">custom Python shell</a> that I keep for such occasions. I modified the script to fit my situation and used PyInstaller to compile the script to an executable. Then I used the <code>EXE::Custom</code> option with the psexec module to run my executable on the machine. First, I had to setup a netcat listener to catch my reverse shell, <code>nc -l -p 4445</code>. My custom executable ran successfully and I had shell access to the box, but I wanted meterpreter access. So, I disabled the AV on the system and ran the psexec module again with the default meterpreter payload.</p>
+<h3>Lessons Learned</h3>
+<p>For Pentesters</p>
+<ul>
+<li>Rooting a box often requires more than running a Metasploit/Core Impact/$Vendor module.</li>
+<li>Sometimes you need custom code to bypass AV, learn to write some code or become friends with someone who can.</li>
+</ul>
+<p>For Defenders</p>
+<ul>
+<li>Unauthenticated access gives an attacker a foothold into your network, eliminate it anywhere you can.</li>
+<li>Antivirus is not a silver bullet, it is too easy to bypass AV software.</li>
+</ul>
+<p><strong>In the interest of offering solutions and not merely pointing out problems, I would love for some of the defenders that read this blog to leave comments describing the techniques used to catch and/or stop these types of attacks.</strong></p>

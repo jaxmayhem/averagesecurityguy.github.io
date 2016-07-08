@@ -1,0 +1,57 @@
+---
+layout: post
+title: Gone Phishin'
+date: 2014-08-18 11:30:40.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Pentest
+- Social Engineering
+tags: []
+meta:
+  _edit_last: '20119316'
+  geo_public: '0'
+  _publicize_pending: '1'
+  publicize_linkedin_url: http://www.linkedin.com/updates?discuss=&scope=45960739&stype=M&topic=5907156516649066496&type=U&a=DhPX
+  publicize_twitter_user: averagesecguy
+  publicize_twitter_url: http://t.co/V0XZFszcsJ
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+  _oembed_090557619c50f632b47f57ad507496ad: '{{unknown}}'
+  _oembed_d41e8c280ea26f02e38b9fbb45ca201c: '{{unknown}}'
+  _oembed_23d135eb204fb15bab20a4243594e633: '{{unknown}}'
+  _oembed_cf722aa621905900ac187f54a9b4a9a0: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>A couple of weeks ago I was contracted to run a basic phishing campaign. The overall goal of the campaign was to raise awareness, not to gather credentials or to execute code. The requirements included identifying which user clicked on the phishing links and recording any email responses from the targets. The basic process I followed is outlined below.</p>
+<ol>
+<li>Register a domain name and configure SPF records.</li>
+<li>Setup a phishing server.</li>
+<li>Build the phishing site.</li>
+<li>Listen for email responses.</li>
+<li>Send the phishing emails.</li>
+</ol>
+<h3>Configure the Domain and SPF Record</h3>
+<p>A few years ago I started using Namecheap for my domain name registrations and DNS hosting. They have great prices and their service is easy to use. For this campaign I went to NameCheap and registered a domain very similar to the target organization.</p>
+<p>For a phishing campaign to be successful you have to bypass the target's spam filters. Before a spam filter looks at the content of the email it makes sure the mail servers DNS records are in order. First, the IP address you are sending your phishing emails from should have an MX record associated with it. Second, there should be a reverse DNS record associated with the hostname in the MX record. Keep in mind, the reverse DNS record cannot be configured at NameCheap, it has to be configured with the ISP who provides the IP address. Finally, there should be an Sender Policy Framework (SPF) record that specifies the IP address and DNS names of servers allowed to send mail from your domain.</p>
+<p>SPF records must be written in a particular format, which I can never remember. So, I use the <a href="http://www.microsoft.com/mscorp/safety/content/technologies/senderid/wizard/" title="Microsoft Sender Policy Framework wizard." target="_blank">SPF wizard provided by Microsoft</a> to generate the SPF record for me.</p>
+<p>For more information on setting up a phishing domain, check out Raphael Mudge's excellent blog post, <a href="http://blog.cobaltstrike.com/2013/10/03/email-delivery-what-pen-testers-should-know/" title="Email Delivery - What Every Pentester Should Know" target="_blank">Email Delivery - What Every Pentester Should Know.</a></p>
+<h3>Setup a Server</h3>
+<p>There are a number of ways to get a small server to use for phishing but my preferred option is DigitalOcean because they are cheap and the servers are very easy to setup. First, you will need to register for a DO account or login if you already have one. Once you are at the dashboard, create a new droplet. The hostname for the droplet should be the same as the hostname used in the MX record. DigitalOcean will automatically create a PTR record that maps the droplet's IP address to the hostname. I use the smallest server size, which is more than enough power to run the phishing campaign. Once the server is running, install and configure a web server.</p>
+<h3>Build the Phishing Site</h3>
+<p>For this contract there were two campaigns. For the first campaign the goal was to convince the target to click on a link in the email and visit the phishing site. The phishing site was just a static web page that provided the user with an awareness message. For the second campaign, the goal was to convince the target to visit a fake OWA site and attempt to enter credentials. If a target attempted to enter credentials then they were redirected to the awareness message. I used a bit of Javascript to handle the redirection, <code>onclick="parent.location='http://&lt;phish_server&gt;/awareness.html'"</code>. For both campaigns, the client wanted to know which targets followed the links and for the second campaign the client wanted to know who attempted to enter OWA credentials.</p>
+<p>Each target user was sent a link with a unique id number so that each web page visit could be tracked to a particular user. On each of the links I simply added a query parameter called id and gave it an incremental value for each user. So user 1 would have a link like <code>http://&lt;phishing_site&gt;/awareness.html?id=1</code>. Since the id value was sent as a query parameter, the web server logs could be used to pull stats on who visited each page and how often. Unfortunately, the client's Barracuda Spam filter saw the id value and decided the links were tracking links and blocked the messages. The client allowed the quarantined messages to go through but I need to come up with a new strategy for the future.</p>
+<h3>Listen for Email Responses</h3>
+<p>Whenever a phishing campaign is run there will inevitably be targets who respond to the phishing emails with questions or automatic replies. The client wanted to track any email responses from the targets. Not wanting to setup sendmail just to listen for emails, I decided to write a Python script that would listen on port 25 and write to a file any emails received. The Python script is available on my <a href="https://github.com/averagesecurityguy/Phishing" title="Scripts for simple phishing campaigns" target="_blank">GitHub account</a>. The script must be run as root so that it can listen on port 25.</p>
+<h3>Send the Phishing Emails</h3>
+<p>Between the two campaigns I needed to send 150 emails. Not wanting to do this by hand, I again turned to Python to get the job done. I created a JSON file with one entry for each target. Each entry contained the variables that I would plug into my phishing template, including the unique identifier for the user, and the phishing campaign for which the target was involved. The script read the JSON file and for each user built the correct email from the template and sent the message. You can find a sample JSON file and the Python script on my <a href="https://github.com/averagesecurityguy/Phishing" title="Scripts for simple phishing campaigns." target="_blank">GitHub account</a> as well. This script does not need root permission.</p>
+<h3>Final Thoughts</h3>
+<p>Once the campaign was over, I was able to gather statistics on which users followed the links in the emails and which users attempted to enter credentials by reviewing the web server logs. Also note, the Javascript used to redirect users to the warning page could easily be rewritten to gather the credentials before redirecting to the warning page or the real site.</p>

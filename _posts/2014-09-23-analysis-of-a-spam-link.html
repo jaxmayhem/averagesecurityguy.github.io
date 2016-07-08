@@ -1,0 +1,97 @@
+---
+layout: post
+title: Analysis of a Spam Link
+date: 2014-09-23 11:30:59.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Just For Fun
+- Research
+tags: []
+meta:
+  _edit_last: '20119316'
+  geo_public: '0'
+  _publicize_pending: '1'
+  publicize_linkedin_url: https://www.linkedin.com/updates?discuss=&scope=45960739&stype=M&topic=5920202623742390272&type=U&a=Ohcn
+  publicize_twitter_user: averagesecguy
+  publicize_twitter_url: http://t.co/nZjUgRFyVj
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+  _oembed_14abea3414616f8f2e0fa48db7f423e3: '{{unknown}}'
+  _oembed_f73bdf3dd668ad308630eb27806ba0c7: '{{unknown}}'
+  _oembed_c0d0723d05fe6655441e665ac92cedfb: '{{unknown}}'
+  _oembed_922576cb88a880a63c930765229d7aaa: '{{unknown}}'
+  _oembed_6e13cfeb43759dcb0902b841e7a3ffa3: '{{unknown}}'
+  _oembed_186dec9356573ba2c92ce92db5e01a07: '{{unknown}}'
+  _oembed_64158b140284cb87a9ae7dda0d190141: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>This weekend I received a spam message that wanted to sell me tickets to a comedy show in Louisville, KY. This spam message caught my eye because it made it past Google's spam filters and I'm planning to go to Derbycon in Louisville next week. I decided to explore the link in the email a bit and see what I could find.</p>
+<p>The original link sent in the email was this.</p>
+<pre>http://www.emergingcomics.com/special.php?j=eyJ1IjoiRDk1QUI
+0RUQzODAzRjVBOTU3NDJDQzE5NEUzQzEzOTIiLCJpIjoiQU1BWk9OJTIwU0
+VTIiwiciI6ImciLCJ0IjoiYUp0Zml0aEhRUHRzUXV0YXRFeHNvSkZ1eEZEb
+2h5ZyIsImwiOiJodHRwJTNBJTJGJTJGJTIwZ29vLmdsJTJGQTdYT0pIIiwi
+diI6IjguNjkuMC4xNjEifQ==&amp;r=0.720967122353613</pre>
+<p>The first thing I noticed was the base64 encoded data in the <code>"j"</code> parameter. I decoded the data and got the following JSON object. </p>
+<pre>{"u":"D95AB4ED3803F5A95742CC194E3C1392","i":"AMAZON%20SES",
+"r":"g","t":"aJtfithHQPtsQutatExsoJFuxFDohyg","l":"http%3A%
+2F%2F%20goo.gl%2FA7XOJH","v":"8.69.0.161"}</pre>
+<p>Looking at the <code>"l"</code> key in the JSON object, I decided the special.php page was probably a redirect script so I opened the link using <code>curl -I</code> to get the headers.</p>
+<pre>HTTP/1.1 302 Moved Temporarily
+Date: Mon, 22 Sep 2014 17:37:27 GMT
+Server: Apache mod_fcgid/2.3.10-dev
+X-Powered-By: PHP/5.4.31
+Location: http://atmst.net/utr64.php?j=eyJ1IjoiRDk1QUI0RUQz
+ODAzRjVBOTU3NDJDQzE5NEUzQzEzOTIiLCJpIjoiQU1BWk9OJTIwU0VTIiw
+iciI6ImciLCJ0IjoiYUp0Zml0aEhRUHRzUXV0YXRFeHNvSkZ1eEZEb2h5Zy
+IsImwiOiJodHRwJTNBJTJGJTJGJTIwZ29vLmdsJTJGQTdYT0pIIiwidiI6I
+jguNjkuMC4xNjEifQ%3D%3D
+Content-Type: text/html</pre>
+<p>Sure enough, the special.php page gave me a 302 response and sent me to <em>atmst.net/utr.php</em>. I also noticed that the base64 data in the <code>"j"</code> parameter was passed to this new page but was URL encoded.</p>
+<p>I again used <code>curl -I</code> to get the page at <em>atmst.net</em> assuming it was a redirect script as well.</p>
+<pre>HTTP/1.1 302 Found
+Server: nginx/1.0.4
+Date: Mon, 22 Sep 2014 17:39:29 GMT
+Content-Type: text/html
+Connection: keep-alive
+Keep-Alive: timeout=20
+X-Powered-By: PHP/5.2.17
+Location: http:// goo.gl/A7XOJH
+Cache-Control: max-age=259200
+Expires: Thu, 25 Sep 2014 17:39:29 GMT</pre>
+<p>Once again, I've been redirected, this time to the URL referenced in the <code>"l"</code> key in the base64 encoded JSON object.</p>
+<p>After doing a bit of research on <em>atmst.net</em> I found that it is used by AtomPark Software as part of its Atomic Email Tracker software. I'm not sure what all of the keys in the JSON object represent but based on the information here, <em>hxxp://www.massmailsoftware.com/tracker/integration.htm</em> the <code>"u"</code> key is most likely the MD5 hash of the email address of the user account.</p>
+<p>I decided to play around with the parameters a bit and see if all of the parameters were required for the redirect to be successful.</p>
+<p>With the exception of the <code>"l"</code> key, I replaced all of the values in the JSON object with the letter "a." For the "l" key I changed the URL to <em>http%3A%2F%2F%20arbitrary.test</em> so that my JSON object now looked like this.</p>
+<pre>{"u":"a","i":"a","r":"g","t":"a","l":"http%3A%2F%2F%20arbit
+rary.test","v":"a"}</pre>
+<p>I then base64 encoded the JSON object and once again used <code>curl -I</code> to see what would happen.</p>
+<pre>curl -I http://atmst.net/utr64.php?j=eyJ1IjoiYSIsImkiOiJhIi
+wiciI6ImciLCJ0IjoiYSIsImwiOiJodHRwJTNBJTJGJTJGJTIwYXJiaXRyY
+XJ5LnRlc3QiLCJ2IjoiYSJ9
+
+HTTP/1.1 302 Found
+Server: nginx/1.0.4
+Date: Mon, 22 Sep 2014 17:45:49 GMT
+Content-Type: text/html
+Connection: keep-alive
+Keep-Alive: timeout=20
+X-Powered-By: PHP/5.2.17
+Location: http:// arbitrary.test
+Cache-Control: max-age=259200
+Expires: Thu, 25 Sep 2014 17:45:49 GMT</pre>
+<p>This time I was redirected to the URL I chose but I did not have to provide a valid user id. This shows the <em>atmst.net</em> server is an open redirect. Further testing showed that only the <code>"r"</code> and <code>"l"</code> keys were required in the JSON object and that it was not necessary to URL encode the target URL.</p>
+<p>So if we base64 encode the following JSON object and pass it as the <code>"j"</code> parameter to <em>atmst.net/utr64.php</em> we will be redirected to <em>google.com</em></p>
+<pre>{"r":"g","l":"http://google.com"}</pre>
+<p>Further research found two other domains run by the same company that are also vulnerable to the open redirect.</p>
+<p><em>atrstat.com</em><br />
+<em>etrstat.com</em><br />
+<em>atmst[1-5].net</em></p>

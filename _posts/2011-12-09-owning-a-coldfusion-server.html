@@ -1,0 +1,32 @@
+---
+layout: post
+title: Owning a ColdFusion Server
+date: 2011-12-09 23:00:07.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Pentest
+tags:
+- ColdFusion
+- directory traversal
+- locale
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1361214016;}
+  _oembed_78a61dc67a2b0cc6eecefcf5fca1eeb1: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Back in November Chris Gates, <a href="http://twitter.com/carnal0wnage" title="carnal0wnage on twitter">@carnal0wnage</a>, gave a talk called "From LOW to PWND" at BSides Atlanta. In the talk he discussed a ColdFusion directory traversal vulnerability that allows the admin password hash to be downloaded. More details can be found at <a href="http://www.gnucitizen.org/blog/coldfusion-directory-traversal- faq-cve-2010-2861/" title="gnucitizen coldfusion blog entry">GNUCitizen</a>. Once the password is downloaded it can be cracked, it is a SHA1 hash, or it can be used to login to the server. The article on GNUCitizen includes step-by-step instructions for authenticating to the server using the hash.</p>
+<p>On a recent job I came across a vulnerable ColdFusion server, downloaded the hash and followed the instructions for logging in with the hash. I was unsuccessful in my attempts to login because the server refreshed the page every 30 seconds and I couldn't go through all of the steps fast enough. So, I did what anyone in their right mind would do and wrote a script. The script uses the directory traversal flaw to download the password.properties file, extract the password, extract the "salt" on the login page, and login to the page with the salted admin hash. If all goes well, the authorization cookie will be set and printed to the screen. The cookie can be manually added to <a href="http://firefox.com">firefox</a> using the <a href="https://addons.mozilla.org/en-US/firefox/addon/cookies-manager-plus/">Cookies Manager+</a> addon to gain administrative control of the ColdFusion server. From there a ColdFusion shell can be uploaded and commands can be run on the server with SYSTEM level privileges. The script is available on <a href="https://github.com/averagesecurityguy/scripts" title="averagesecurityguy scripts on github">Github</a>.</p>
+<p>Another interesting file to download is the neo-datasource.xml file, which contains 3DES encrypted passwords for the backend database connections. The passwords can be easily decrypted because the encryption key is static and is used on all ColdFusion servers. The passwords are buried in the file and are a pain to locate manually. Again, I did what anyone else would do and wrote a script. The cfneo.rb script will download a neo-datasource.xml file from a vulnerable server, find all the encrypted passwords, and decrypt them. It uses the RexTable module to print the encrypted and decrypted passwords in a nice table. The cfneo.rb and rextable.rb scripts can be downloaded from <a href="https://github.com/averagesecurityguy/scripts" title="averagesecurityguy scripts on github">Github</a>.</p>
+<p>The ColdFusion locale directory traversal flaw affects a number of pages and sometimes requires a different path. Some of the other affected pages and another possible path can be found in Chris Gates's POC python script on <a href="http://www.exploit-db.com/exploits/14641/" title="exploit-db.com exploit number 14641">exploit-db.com</a>. Details about decrypting the neo-datasource.xml file can be found at the <a href="http://hexale.blogspot.com/2008/07/how-to-decrypt-coldfusion-datasource.html" title="HEXALE blog">HEXALE blog</a>.</p>
+<h3>Update</h3>
+<p>When I was researching and writing this script I found <a href="http://www.metasploit.com/modules/auxiliary/scanner/http/coldfusion_locale_traversal" title="metasploit coldfusion auxiliary module">this</a> metasploit module, which is an auxiliary module that scans for vulnerable ColdFusion servers. I totally missed <a href="http://www.exploit-db.com/exploits/16985/" title="exploit-db.com coldfusion metasploit module">this</a> metasploit module, which is an exploit module. I can't seem to find it in the latest version of metasploit, which must be why I missed it the first time.</p>
+<p>Enjoy these tools and remember only use them for good.</p>

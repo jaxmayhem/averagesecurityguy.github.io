@@ -1,0 +1,58 @@
+---
+layout: post
+title: A Domain By Any Other Name
+date: 2012-11-30 11:30:36.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Research
+tags:
+- Amazon EC2
+- Apache Web Server
+- python
+- Research
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>So, I discovered a small problem with my Web server the other day. I host the <a href="https://fwcheck.com" title="FWcheck Firewall Rule Analyzer" target="_blank">fwcheck.com</a> firewall rule analyzer on an Amazon EC2 server running the Apache web server. Being a security nut, I decided that this server needed to be HTTPS only so I configured my my Apache server to redirect all HTTP traffic to HTTPS like so.</p>
+<pre>
+RewriteEngine   on
+RewriteCond %{HTTP_HOST} ^fwcheck.com$
+RewriteRule ^/(.*)$ https://fwcheck.com/$1 [NC,L,R]
+RewriteCond %{HTTP_HOST} ^www.fwcheck.com$
+RewriteRule ^/(.*)$ https://www.fwcheck.com/$1 [NC,L,R]
+RewriteCond %{HTTP_HOST} ^54.245.114.39$
+RewriteRule ^/(.*)$ https://fwcheck.com/$1 [NC,L,R]
+</pre>
+<p>After a little bit of testing, I was satisfied the redirection was working. Then I was looking at the server instance in the Amazon AWS console and I noticed the Amazon public DNS* name and decided to connect to my server using that name.</p>
+<p><a href="http://averagesecurityguy.info/?attachment_id=782" rel="attachment wp-att-782"><img src="{{ site.baseurl }}/assets/fwcheck.png" alt="" width="500" height="239" class="alignnone size-full wp-image-782" /></a></p>
+<p>I got a directory listing, which I did not expect. So I went back to my Apache config and added another redirect as well as a directive to disallow directory listings.</p>
+<pre>
+&lt;Directory /&gt;
+    Options -Indexes
+    AllowOverride None
+&lt;/Directory&gt;
+
+RewriteCond %{HTTP_HOST} ^ec2-54-245-114-39.us-west-2.compute.amazonaws.com$
+RewriteRule ^/(.*)$ https://fwcheck.com/$1 [NC,L,R]
+</pre>
+<p>It was a simple fix but it made me curious as to whether other servers were improperly configured like mine. So, I downloaded the <a href="http://s3.amazonaws.com/alexa-static/top-1m.csv.zip" title="Alexa top 1 million web sites" target="_blank">Alexa top 1 million web sites</a> and started writing some Python code. My goal was to find domains that were hosted on Amazon EC2 and that returned different results when accessing the web server with the domain name and with the Amazon DNS name.</p>
+<p>First, I <a href="https://gist.github.com/4173503" title="Script to find domains hosted on EC2" target="_blank">wrote a script</a> that finds domains hosted on EC2. The script calls the host command to get a list of IP addresses associated with each domain. It then calls the host command again for each IP address, and parses the results to see which IP addresses were hosted at Amazon. The Amazon addresses are prefixed with 'ec2_'.</p>
+<p>Next, I <a href="https://gist.github.com/4173509" title="Script to find domains that do not match their amazon ec2 domain name" target="_blank">wrote a script</a> to make an HTTP connection to both the domain name and the Amazon DNS name for each IP address and checked the two responses to see if they differed. I then wrote the results to an HTML file for manual verification.</p>
+<p>The results were not as good as I had hoped. Of the 1 million web sites checked, I found 15,877 unique domains on 11,842 unique servers were hosted on Amazon. Of those 15,877 domains only 3,183 domains did not match the results from one or more of the Amazon EC2 servers on which the domain was hosted. Although I was disappointed in the results, I did find a few gems**, which I won't mention because I don't want to end up like <a href="http://www.theverge.com/2012/11/20/3673754/att-ipad-hack-email-auernheimer-iccid-goatse" title="Weev conviction" target="_blank">this guy</a>.</p>
+<p>* Amazon assigns a public DNS name to all of its externally accessible instances. The DNS name is based on the IP address and the data center in which the instance is located.<br />
+** All identified vulnerabilities were reported to the appropriate people.</p>

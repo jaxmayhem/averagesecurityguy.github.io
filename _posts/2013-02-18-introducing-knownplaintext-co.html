@@ -1,0 +1,42 @@
+---
+layout: post
+title: Introducing KnownPlainText.co
+date: 2013-02-18 12:39:37.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Password Cracking
+- Pentest
+tags:
+- crack passwords
+- knownplaintext
+- online
+- password cracker
+- password cracking
+- penetration testing
+- windows
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  _wpas_done_648456: '1'
+  _wpas_done_648455: '1'
+  publicize_twitter_user: averagesecguy
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  publicize_reach: a:2:{s:7:"twitter";a:1:{i:648456;i:687;}s:2:"wp";a:1:{i:0;i:26;}}
+  _wpas_skip_648456: '1'
+  _wpas_skip_648455: '1'
+  _oembed_35b1e3913dd7471ba5446de3e9576b1d: '{{unknown}}'
+  _oembed_52ed10ea65dbe313a3fd0368e4c8cff0: '{{unknown}}'
+  _oembed_339b0a001be92e725b0a4e0874f418d8: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>As a pentester, I often gain access to a Windows domain controller and dump the hashes. I can use pass-the-hash to login to other Windows machines with those credentials but if I want to login to web services or databases as those users, I need to crack the passwords. Typically, I would break out JtR, Ophcrack, rcracki_mt, or Hashcat. With Ophcrack or rcracki_mt, it can take anywhere from 30 minutes to many hours to crack all of the passwords, depending on the number of hashes in the file. In addition, you have to store Gigs worth of data files. With JtR or Hashcat, you have a similar wait time and you have to maintain extensive word lists and mangling rules. In addition, most of the passwords you test will not meet the Windows complexity requirements, which are common in large organizations.</p>
+<p><a href="http://knownplaintext.co" title="KnownPlainText.co Password Cracking Service.">KnownPlainText.co</a> is different. It uses a database to store pre-computed hashes based on the most common base words and password mangling rules and all of the passwords meet the Windows complexity requirements. The initial database was built from public password breaches such as, rockyou, and facebook. As users upload new password hashes, the database will be updated with new base words and password mangling rules, becoming more efficient over time.</p>
+<p>The value of <a href="http://knownplaintext.co" title="KnownPlainText.co Password Cracking Service.">KnownPlainText.co</a> comes from the time/effectiveness trade off. You can spend hours cracking 100% of passwords or you can crack 10-20% of the passwords immediately. Over the course of the year, the time and money you save will completely pay for the service.</p>
+<p>Please checkout <a href="http://knownplaintext.co" title="KnownPlainText.co Password Cracking Service.">the site</a> for more details and feel free to provide constructive feedback.</p>

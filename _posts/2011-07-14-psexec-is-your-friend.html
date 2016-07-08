@@ -1,0 +1,35 @@
+---
+layout: post
+title: Psexec is your friend
+date: 2011-07-14 20:24:02.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+- Metasploit
+- Pentest
+tags:
+- Backtrack5
+- metasploit
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1413418475;}
+  _oembed_a5ce6eb79f0c234b304602cd8a0b7831: '{{unknown}}'
+  _oembed_3a15fde31b0f5a41275d6e4706b5827b: '{{unknown}}'
+  _oembed_2870bf634e74118ddfd0fd6a8d386276: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<h3>Obtaining Domain Admin Access Using Psexec</h3>
+<p>On a recent pentest, one of the goals was to gain domain admin access to the network. If you can compromise a domain controller you can use the commands <code>net user username password /ADD /DOMAIN</code> and <code>net group "Domain Admins" username /ADD /DOMAIN</code>. I found the domain controllers but was unable to identify a suitable vulnerability that would allow me to access them. However, I found another box on the domain that was vulnerable to MS08-067 (yes, there are still boxes that have not been patched for this vulnerability). Using metasploit I was able to get a meterpreter shell on this box. I then used the ps command to find out what processes were running. I found a few processes running under the administrator account for the domain. Next, I migrated to one of the processes and used the upload command in meterpreter to upload psexec to the box. Meterpreter uploads files to the default path for the user. Next, I used the shell command to drop into a shell and ran the commands <code> psexec \\nameofdc net user username password /ADD /DOMAIN</code> and <code>psexec \\nameofdc net group "Domain Admins" username /ADD /DOMAIN</code>. I now had my own user account with domain admin credentials.</p>
+<h3>A Few Notes</h3>
+<ul>
+<li>If you are using BT5 you can find psexec in the <code>/pentest/windows-binaries/pstools</code> folder.</li>
+<li>You can run the <code>net user</code> and <code>net group</code> commands from any process running under any domain admin account. To identify the domain admins you can use the enum_domain_group_users post module. You need to background your meterpreter session and type <code>use post/windows/gather/enum_domain_group_users</code>. Then set the group name, <code>set GROUP "Domain Admins"</code>, and session <code>set SESSION 1</code>. Then run it. You will get a list of domain admin users.</li>
+<li>If you try to drop to a shell and get an error like this <code>stdapi_sys_process_execute: Operation failed: 1314</code>, do this instead <code>execute -f cmd.exe -c -i -H</code>. This is a <a href="http://dev.metasploit.com/redmine/issues/1448">known issue</a> in meterpreter.</li>
+</ul>

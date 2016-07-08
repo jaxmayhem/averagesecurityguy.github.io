@@ -1,0 +1,72 @@
+---
+layout: post
+title: Multiprocessor HTML Login Form Brute Force
+date: 2013-06-19 11:21:00.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Pentest
+- Web App Testing
+tags:
+- penetration testing
+- Pentesting
+- python
+- Web App Testing
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648455: '1'
+  _oembed_520da4529b5a7b3905272c007cbb5ebf: '{{unknown}}'
+  _oembed_a37ef15ca9c1dcf633393a00f32139cb: '{{unknown}}'
+  _oembed_d2e20600c82a49b5062cab98e256d92b: '{{unknown}}'
+  _oembed_5dc05ccd720775fe3f96434c26936fcd: '{{unknown}}'
+  _oembed_dd3b44bc7d690a6cf764286d56a3be35: '{{unknown}}'
+  _oembed_59602182496dfad406c8e3fcd535c706: '{{unknown}}'
+  _oembed_3a92f6bd0136668cea1154172833d827: '{{unknown}}'
+  _oembed_09e50ce632eb78cdcd273a387b7e58cb: '{{unknown}}'
+  _oembed_da7bf3536bb877e76bd38a1db67ed1bc: '{{unknown}}'
+  _oembed_6854a9a523b3c5e142fecca7e853ed52: '{{unknown}}'
+  _oembed_e533219675619cf48a368333e6e755f4: '{{unknown}}'
+  _oembed_666a54283fc23e1c23821ce913d0cf33: '{{unknown}}'
+  _oembed_2e21e37758338541872ba39c64424dcf: '{{unknown}}'
+  _oembed_02e6cfed8385de40ace8680142685951: '{{unknown}}'
+  _oembed_d74deec850852266ff5a02d3759b0742: '{{unknown}}'
+  _oembed_cd585569d5dceed861670f0e0a17c233: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>The other day I needed to brute force an HTTP basic auth login so I fired up Metasploit, as I usually do, and and tried to run the <code>auxiliary/scanner/http/http_login</code> module. The module crashed and printed out a stack trace. Instead of spending time troubleshooting it, I decided to throw together a quick Python script. So I used my <a href="https://github.com/averagesecurityguy/scripts/blob/master/multi_ssh.py" title="Multiprocessor SSH Brute force Python script">multiprocessor SSH brute force script</a> as a template and put together a <a href="https://github.com/averagesecurityguy/scripts/blob/master/brute_http_basic.py" title="Multiprocessor HTTP Basic Auth Brute Force Python Script">multiprocessor basic auth script</a>. Well the next day, I needed to brute force an HTML login form so I decided to write Python script to do that as well.</p>
+<p>HTTP Basic Auth is quite easy to brute force because after the credentials are sent, the server responds with a 401 status code if they were the wrong credentials and either a 2xx or 3xx status code if they were correct. HTML login forms are much more difficult because there are often cookies that must be set and hidden fields that are included in the form, typically for CSRF purposes. In addition, the body of the server response must be parsed to determine if the login failed or succeeded. So, brute forcing an HTML login forms follows a pattern like this.</p>
+<ol>
+<li>GET the login page so that any needed cookies are set.</li>
+<li>Parse the login form for any hidden fields and associated values that must be sent in addition to the credentials.</li>
+<li>POST the login form with the credentials and any hidden fields.</li>
+<li>Parse the response to see if a login failure has occurred and to update the value of any hidden fields.</li>
+</ol>
+<p>I built a script that can automate the process but it does require some manual intervention in the form of a configuration file. The configuration file can be seen below and is in JSON format. First, set the login URL and the action URL, this is where the form gets POSTed. Next, set the field name for the username and password and set the files that contain the list of usernames and passwords to try. Next, set the string of text that will be in the failure message and set the number of threads that should be used. Finally, define the names of any hidden fields that should be included in the login form.</p>
+<pre>
+{
+	"login": "https://domain/login/url",
+	"action": "https://domain/login/action",
+	"ufield": "login",
+	"pfield": "password",
+	"ufile": "user",
+	"pfile": "pass",
+	"fail_str": "Some string that shows our login failed",
+	"threads": "1",
+	"hidden": [
+		"hidden_field_name1", "hidden_field_name2"
+		]
+}
+</pre>
+<p>The script will first GET the login page defined in the config file, set any necessary cookies, and parse the page for the values of the hidden fields defined in the config file. Next, the script POSTs the login credentials and the hidden fields with their values to the action page defined in the config file. Finally, the response is parsed to find the failure string and to update the value of any hidden fields. If the failure string is present in the response, the process is repeated with a new set of credentials. If not, the script will stop and print the credentials that succeeded.</p>
+<p>The script and a sample configuration file can be downloaded from the Scripts repository on my GitHub account, <a href="https://github.com/averagesecurityguy/scripts" title="AverageSecurityGuy Scripts repository on GitHub">https://github.com/averagesecurityguy/scripts</a>. As always, let me know if you have any questions or trouble running the script.</p>

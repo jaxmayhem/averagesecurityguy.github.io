@@ -1,0 +1,49 @@
+---
+layout: post
+title: Twitter Single User Oauth
+date: 2013-01-30 11:20:22.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Learn
+tags:
+- OAuth
+- python
+- Python Requests Twitter Authentication
+- Requests
+- Twitter
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+  tagazine-media: a:7:{s:7:"primary";s:0:"";s:6:"images";a:0:{}s:6:"videos";a:0:{}s:11:"image_count";i:0;s:6:"author";i:20119316;s:7:"blog_id";s:8:"19521229";s:9:"mod_stamp";s:19:"2013-01-30
+    16:20:22";}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I was helping a friend with a Python script he was using to query the Twitter search API and I decided I wanted to write a simple Twitter client in Python. Twitter allows users to use two OAuth authorization methods, <a href="https://dev.twitter.com/docs/auth/3-legged-authorization" title="Twitter three-legged authorization">three-legged</a> and <a href="https://dev.twitter.com/docs/auth/oauth/single-user-with-examples" title="Twitter Single User OAuth">single user</a>. Most OAuth examples and libraries are centered around three-legged authorization, which requires an application to call a Twitter authentication page, so the user can input his or her username and password and then calls back to another URL with the necessary access tokens. This sounded overly complex for what I wanted, so I started looking at single user authorization. I am sure the standard OAuth libraries can handle single user authorization just as well as three-legged authorization but I also wanted to understand the OAuth protocol better, so I wrote my own single user OAuth module using the information <a href="https://dev.twitter.com/docs/auth/authorizing-request" title="Authorizing a Twtitter Request">here</a> and <a href="https://dev.twitter.com/docs/auth/creating-signature" title="Creating a Twitter OAuth Signature">here</a>. This module integrates with the <a href="http://docs.python-requests.org/en/latest/" title="Python Requests Library">Python Requests library</a> so accessing Twitter is as easy as:</p>
+<pre>
+import requests
+import twitter_auth
+
+ssn = requests.Session
+ssn.auth = twitter_auth.TwitterSingleOAuth(consumer_key,
+                                           consumer_secret,
+                                           access_token,
+                                           access_token_secret)
+
+resp = ssn.get('https://api.twitter.com/1.1/statuses/mentions_timeline.json')
+print resp.json()
+</pre>
+<p>To use the library you will need to sign in to <a href="https://dev.twitter.com" title="Twitter Developers Page">dev.twitter.com</a> and create a new application and get your consumer key, consumer secret, access token, and access token secret. Don't share the consumer secret or the access tokens with anyone, including <a href="http://www.guardian.co.uk/technology/2013/jan/25/github-search-security-warning" title="Sensitive files on Github">Github</a>. You can find the Twitter single user OAuth library <a href="https://github.com/averagesecurityguy/outcast/blob/master/twitter_auth.py" title="twitter_auth.py module">here</a>.</p>
+<p>Have fun, and as always, let me know if there are any problems.</p>

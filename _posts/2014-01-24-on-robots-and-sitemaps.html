@@ -1,0 +1,111 @@
+---
+layout: post
+title: On Robots and Sitemaps
+date: 2014-01-24 11:30:31.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Just For Fun
+- Research
+- Thoughts
+- Web App Testing
+tags: []
+meta:
+  _edit_last: '20119316'
+  draftfeedback_requests: a:1:{s:13:"52e1cefe023a4";a:3:{s:3:"key";s:13:"52e1cefe023a4";s:4:"time";s:10:"1390530302";s:7:"user_id";s:8:"20119316";}}
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  publicize_twitter_url: http://t.co/fyAMZqLk6K
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  publicize_linkedin_url: http://www.linkedin.com/updates?discuss=&scope=45960739&stype=M&topic=5832519628693176320&type=U&a=Bn6U
+  _wpas_done_648455: '1'
+  _oembed_1668490bfea364843f18514623e67484: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Robots.txt and Sitemap.xml files are extremely useful when managing web crawlers but they can also be dangerous when they give away too much information. So what are these files and how are they used?</p>
+<p>Many years ago, web site owners and web crawlers developed a method to allow web site owners to politely ask web crawlers not to crawl certain portions of a site. This is done by defining a robots.txt file (<a href="http://en.wikipedia.org/wiki/Robots_exclusion_standard" title="Robots Exclusion Standard" target="_blank">Robots Exclusion Standard</a>). For the most part, this standard is adhered to by web crawlers.</p>
+<p>A typical robots.txt file looks like this.</p>
+<pre>
+#Google Search Engine Robot
+User-agent: Googlebot
+Allow: /?_escaped_fragment_
+
+Allow: /search?q=%23
+Disallow: /search/realtime
+Disallow: /search/users
+Disallow: /search/*/grid
+
+Disallow: /*?
+Disallow: /*/followers
+Disallow: /*/following
+
+Disallow: /account/not_my_account
+
+#Yahoo! Search Engine Robot
+User-Agent: Slurp
+Allow: /?_escaped_fragment_
+
+Allow: /search?q=%23
+Disallow: /search/realtime
+Disallow: /search/users
+Disallow: /search/*/grid
+
+Disallow: /*?
+Disallow: /*/followers
+Disallow: /*/following
+
+Disallow: /account/not_my_account
+</pre>
+<p>This is a portion of Twitter's <a href="https://twitter.com/robots.txt" title="Robots.txt file for Twitter" target="_blank">robots.txt</a> file. Notice how Twitter tells the search engines which portions of the site are allowed to be crawled and not allowed to be crawled.</p>
+<p>Tonight, while surfing the web I found this <a href="https://data.healthcare.gov/robots.txt" title="Robots.txt for data.healthcare.gov" target="_blank">robots.txt</a> file. I'll let you guess which site it goes to.</p>
+<pre>
+Sitemap: http://data.healthcare.gov/sitemap-data.healthcare.gov.xml
+</pre>
+<p>Notice that there are no Disallow directives. Based on the accepted convention, the web site owner gives all web robots permission to crawl the entire site. Theoretically, you could write your own robot and legally crawl the entire site.</p>
+<p>Along with the agreement to use robots.txt files, web site owners and web crawlers also decided to use a sitemap.xml file to explicitly define the structure of the web site and the URLs "on a website that are available for crawling" (<a href="http://en.wikipedia.org/wiki/Sitemaps" title="Wikipedia definition of Sitemaps" target="_blank">Sitemaps</a>). The Sitemap directive can be added to the robots.txt file to tell web crawlers where to find the sitemap file.</p>
+<p>If we look at the sitemap for data.healthcare.gov we can see the URLs, which by convention, we are EXPECTED to crawl or visit as users.</p>
+<pre>
+&lt;sitemapindex xmlns=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;http://data.healthcare.gov/sitemap-datasets-data.healthcare.gov0.xml&lt;/loc&gt;
+  &lt;/sitemap&gt;
+  &lt;sitemap&gt;
+    &lt;loc&gt;http://data.healthcare.gov/sitemap-users-data.healthcare.gov0.xml&lt;/loc&gt;
+  &lt;/sitemap&gt;
+&lt;/sitemapindex&gt;
+</pre>
+<p>This sitemap file tells us about two additional sitemap files. The sitemap-users-data.healthcare.gov0.xml file looks interesting.</p>
+<pre>
+&lt;urlset xmlns=&quot;http://www.sitemaps.org/schemas/sitemap/0.9&quot;&gt;
+  &lt;url&gt;
+    &lt;loc&gt;http://data.healthcare.gov/profile/Bill-Fencken/ta6q-868x&lt;/loc&gt;
+    &lt;lastmod&gt;2010-12-06&lt;/lastmod&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;http://data.healthcare.gov/profile/Wahid-Saleemi/u63n-yr8b&lt;/loc&gt;
+    &lt;lastmod&gt;2010-12-06&lt;/lastmod&gt;
+  &lt;/url&gt;
+  &lt;url&gt;
+    &lt;loc&gt;http://data.healthcare.gov/profile/Debbie-York/45wa-c5qw&lt;/loc&gt;
+    &lt;lastmod&gt;2010-12-06&lt;/lastmod&gt;
+  &lt;/url&gt;
+</pre>
+<p>This sitemap file tells us the profile link for a number of user accounts. In fact, it provides links to approximately 3900 user accounts. Again, based on convention, robots are EXPECTED to visit each of these links and download the page at the link. You can see that Google did exactly this by running <a href="https://www.google.com/#q=site:data.healthcare.gov+inurl:profile" title="Google search for profiles on data.healthcare.gov">this query</a>.</p>
+<p>So, let's download a page. When you visit a page in a browser, the page is downloaded and rendered by the browser. When a robot or search engine downloads the page they read and parse the HTML code that makes up the page. To see this HTML code, you can right-click on the page in your browser and choose View Source, or something similar depending on your browser. The source code looks like this.</p>
+<p><a href="http://averagesecurityguy.files.wordpress.com/2014/01/healthcare_gov_viewsource.png"><img src="{{ site.baseurl }}/assets/healthcare_gov_viewsource.png" alt="healthcare_gov_viewsource" width="500" height="251" class="alignnone size-full wp-image-949" /></a></p>
+<p>Note, the source code is full of links to other portions of the data.healthcare.gov site, which, by convention, we are allowed to crawl because the robots.txt file does not define any disallowed portions of the site. One such link, <a href="https://data.healthcare.gov/api/users/ta6q-868x?method=contact" title="API link for users.">/api/users/ta6q-868x?method=contact</a>, is found about 1/3 of the way down the page. Visiting this page produces an error message in JSON format, which means a web crawler like Google will likely ignore this page.</p>
+<pre>
+{
+  "code" : "method_not_allowed",
+  "error" : true,
+  "message" : "GET not allowed"
+}
+</pre>
+<p>On a more serious note, a typical attack against websites includes enumerating user accounts and then attempting to brute-force the associated password. Typically, an attacker has to work to find a method to enumerate user accounts but in this case the sitemap file provides a list of user accounts. Personally, I think it would be wise to remove the sitemap file at <code>http://data.healthcare.gov/sitemap-users-data.healthcare.gov0.xml</code>.</p>

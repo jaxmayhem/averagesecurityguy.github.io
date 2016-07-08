@@ -1,0 +1,215 @@
+---
+layout: post
+title: How to Write a Metasploit Post Module
+date: 2011-06-08 20:35:01.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Learn
+- Metasploit
+tags:
+- metasploit
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1364219460;}
+  _oembed_93555baa4af2870adefa281492257068: '{{unknown}}'
+  _oembed_7114a04629331c6c78d9e085e5f933b0: '{{unknown}}'
+  _oembed_343c53725b506e9fcda6ab86edff05f4: '{{unknown}}'
+  _oembed_bdb58495e9d9e7f6ab21dc25b0d61ae3: '{{unknown}}'
+  _oembed_f0a0fe12486bcedfa564541c4d078b12: '{{unknown}}'
+  _oembed_ef4c684701f3c7f888c054791d3e2a0d: '{{unknown}}'
+  _oembed_24ae53657ce294519966957e8d05f17b: '{{unknown}}'
+  _oembed_2201be7a145087dfc26c1c7925a1ba89: '{{unknown}}'
+  _oembed_2f12d07ee6971f6251a268d434aed6dd: '{{unknown}}'
+  _oembed_48da469d7bad6232a0f8b0d5c847c5a5: '{{unknown}}'
+  _oembed_10b6981694e2806d80f66806a16295fd: '{{unknown}}'
+  _oembed_8027f4f687e236489866da022eba66d0: '{{unknown}}'
+  _oembed_904fdaaa7d0fcce44a445014ef571803: '{{unknown}}'
+  _oembed_d57bf9dbecac0a96dc561fae7bdb69da: '{{unknown}}'
+  _oembed_4cae315670848c32e83415cdfa6887c9: '{{unknown}}'
+  _oembed_c99bba9918888167e4c15a6f075ba207: '{{unknown}}'
+  _oembed_b3f158c8ae26a53a996bf28f32893f9a: '{{unknown}}'
+  _oembed_fd44ca51cc959cefa58549c7f1f67e89: '{{unknown}}'
+  _oembed_4f9a09ca53b8bf10fca202c8a8b1cf85: '{{unknown}}'
+  _oembed_b89b31c3071b966b8708248657472bf8: '{{unknown}}'
+  _oembed_d74b84a7dba1b8c635d53cf7dc4122de: '{{unknown}}'
+  _oembed_a7faab52883af4302df7a0a6180325b2: '{{unknown}}'
+  _oembed_884139a238750b638c3169abca73bf11: '{{unknown}}'
+  _oembed_92387118fb5cb7da2b4c57ea7795afc5: '{{unknown}}'
+  _oembed_e92ee49c6e26a2d2b99114e8ed489e4f: '{{unknown}}'
+  _oembed_da7161e5ed53ca4d59f23de9bb478870: '{{unknown}}'
+  _oembed_51146f2590af0b1c05fdfe0de1afcfed: '{{unknown}}'
+  _oembed_e7b876b785bf4dec7a8b59484f8c73d4: '{{unknown}}'
+  _oembed_7c1e42355f9e5707fed6a7ff41a48465: '{{unknown}}'
+  _oembed_3d3db9209ab3b963a36683371f635c2a: '{{unknown}}'
+  _oembed_9f703b83d1fc0e7aeb9e0e27fc9a6049: '{{unknown}}'
+  _oembed_118c4645b171daa28c578a35fecf3ec5: '{{unknown}}'
+  _oembed_7f9572f7acc054b49ea043a3f39b3314: '{{unknown}}'
+  _oembed_78f734251a78231a884d49c37b0e410c: '{{unknown}}'
+  _oembed_79b613438dab0a4bb6a6afb804f493f8: '{{unknown}}'
+  _oembed_ea6d77c833e310f7a4cdb46c5c130392: '{{unknown}}'
+  _oembed_0889b881addd3c7ce70b2437efa34b4d: '{{unknown}}'
+  _oembed_a861ebac9b0dba53014789aef9fe4bde: '{{unknown}}'
+  _oembed_28a822eb2c5c5309f97d546fa9e86fca: '{{unknown}}'
+  _oembed_221592f68cef94996f7e3f39abf43f60: '{{unknown}}'
+  _oembed_ddc23c56a1e6b7e93baeeb54bcea3006: '{{unknown}}'
+  _oembed_96e16010ee4fc87acbe74ea9e36b07e7: '{{unknown}}'
+  _oembed_ff4cbbe381c61bbdf1c7360e01c3c2a1: '{{unknown}}'
+  _oembed_cd497464e23b78184a89ba4db060b5d8: '{{unknown}}'
+  _oembed_f6946ad93234d50b01eb0941763e67b2: '{{unknown}}'
+  _oembed_b777d9199e668a344e9d0da4e5142189: '{{unknown}}'
+  _oembed_cb8a60d4d644c2e6dcb5ac4d0de2d615: '{{unknown}}'
+  _oembed_222ff508c9fd94404ae0e294984ba6e9: '{{unknown}}'
+  _oembed_c309a938c14205cb53e5f4f206b472b8: '{{unknown}}'
+  _oembed_c7c2aee0e2fd3da5e7faa269145ee2d6: '{{unknown}}'
+  _oembed_037783adb0ea9fd41eed16896ef25fe0: '{{unknown}}'
+  _oembed_b294ab3aa2863de87898f62f3d933e33: '{{unknown}}'
+  _oembed_80065e1fecdddc50cfad1c464fac5a3d: '{{unknown}}'
+  _oembed_701ed9b744d7869efcd99a492e1599ed: '{{unknown}}'
+  _oembed_8038354ff19566dd8f1f0b5774d2fb89: '{{unknown}}'
+  _oembed_88741b282663f60dfd645dc7f7a40f0f: '{{unknown}}'
+  _oembed_a8d2832feaeff37e31edb95523d0e4da: '{{unknown}}'
+  _oembed_4e5e7e1d8031c73b3c5e71321353eb2b: '{{unknown}}'
+  _oembed_0f33df203f778144decfe6a837c36773: '{{unknown}}'
+  _oembed_32037f098f779824de9c03282eacfa5c: '{{unknown}}'
+  _oembed_da11d8e81b066cd656308ce4b3b990d3: '{{unknown}}'
+  _oembed_2106687bb27b470d1c02e36a57d02585: '{{unknown}}'
+  _oembed_06ca1826f6b013ceaadc10e72317dcc3: '{{unknown}}'
+  _oembed_2ce521f93de77a70f75205103a7da459: '{{unknown}}'
+  _oembed_717f401b67008dcd6eb62cfe71458f2a: '{{unknown}}'
+  _oembed_372755259413a1e0be22a0ae6be9f3f1: '{{unknown}}'
+  _oembed_c2ea6d7fb2ba14d1d12de73617ff9605: '{{unknown}}'
+  _oembed_2c76aef45f4321062e821247f26dfcb6: '{{unknown}}'
+  _oembed_b87cbe41120cf45bd47b2cfee5f70a25: '{{unknown}}'
+  _oembed_7c74d59fafe619409594e3937b5d6fd6: '{{unknown}}'
+  _oembed_635cee6b5eef08fcfbe96a542e10c8f5: '{{unknown}}'
+  _oembed_68c0d1d10b0e460be257d158d52eb8f3: '{{unknown}}'
+  _oembed_1c625eeb2db21d881c62dc30a1fa578d: '{{unknown}}'
+  _oembed_546c58d3dd3d9f14cc95d0d2be5555cf: '{{unknown}}'
+  _oembed_987a6f36a2d7e33fdc5673e8039e2b8e: '{{unknown}}'
+  _oembed_2db8d81dd06633853c0650cf1b401a73: '{{unknown}}'
+  _oembed_ce7baf66b180bb1e5e18bf36aa343a3b: '{{unknown}}'
+  _oembed_76ae539fb7526244c93179a56fcfab64: '{{unknown}}'
+  _oembed_6b01e223996b0d68a9f11de6cb1039de: '{{unknown}}'
+  _oembed_ffb789385bd94776e3eb46ec5c2ebf69: '{{unknown}}'
+  _oembed_f17c885058f80c2dbc63be4ba446ed2b: '{{unknown}}'
+  _oembed_e6aff28974b15a6e120e82a66d96f153: '{{unknown}}'
+  _oembed_59353c4768385ee13fdb5924e36718d5: '{{unknown}}'
+  _oembed_2febad315ac44f43780b65a00809ac53: '{{unknown}}'
+  _oembed_b6f3932aeca38bcfc388415e9b2d7cb0: '{{unknown}}'
+  _oembed_06569ff91c5101c4b5b74df51fd61743: '{{unknown}}'
+  _oembed_078e2d13749d58fee187ddb8f3dbfd85: '{{unknown}}'
+  _oembed_d10d6931a94ddaba4ed96e0162e7ad4a: '{{unknown}}'
+  _oembed_cfb25fa4239208e45e008b6a08328b40: '{{unknown}}'
+  _oembed_08faaf8e8a27225ac3566a2166e7211b: '{{unknown}}'
+  _oembed_2fb5632572e98aab7313bbe8e9b4116f: '{{unknown}}'
+  _oembed_fa9b011cb8d65951895546b81449d5f5: '{{unknown}}'
+  _oembed_82abed1d9799e0e74c8d9dff0121c82b: '{{unknown}}'
+  _oembed_bed7b2bbb35479f3a9726459b298b9f2: '{{unknown}}'
+  _oembed_b81dd5281e224ea629af751d4087a41c: '{{unknown}}'
+  _oembed_d0133c145ee3d798bbf5049b59495bd3: '{{unknown}}'
+  _oembed_106bd7864c12983bf1f9ca0d755bc469: '{{unknown}}'
+  _oembed_80616d8f638a060e4a37106aa76710c5: '{{unknown}}'
+  _oembed_a37bcf9693ddad428adb56492daf546a: '{{unknown}}'
+  _oembed_8f2afb3f2e58cfcf570520ca3a988267: '{{unknown}}'
+  _oembed_7d2e1edd3c9916d4aa78aa5166c0c28c: '{{unknown}}'
+  _oembed_391bb98becc1575b9617356bb8e103db: '{{unknown}}'
+  _oembed_4c88e7eca14afe35f255018236bc3d38: '{{unknown}}'
+  _oembed_3de61ed8b9b0fd29215888b22f7c6f74: '{{unknown}}'
+  _oembed_c9affdf2f33becc4d199b8e88b133d3d: '{{unknown}}'
+  _oembed_1b6495e66d4126837934dc9adec4bcbc: '{{unknown}}'
+  _oembed_0d5571637e1e9eece7342e9ed97068c8: '{{unknown}}'
+  _oembed_f4bbdb1f67c9e61afc45f5b4e0becf4d: '{{unknown}}'
+  _oembed_698fa69212ac84b5f9aae01264eec7d3: '{{unknown}}'
+  _oembed_79cb53342ac3ebf3c756071e72e3042a: '{{unknown}}'
+  _oembed_3f027058b1e3a99f453e79fffc34c001: '{{unknown}}'
+  _oembed_8fcb77f74f568fc1115b5ee586f5747e: '{{unknown}}'
+  _oembed_583924d2a587c37787d56997cb29ec44: '{{unknown}}'
+  _oembed_c85aaab2193aa761f632eda2fc213f4b: '{{unknown}}'
+  _oembed_beddcb609ba9adfa34c181d99d927cb7: '{{unknown}}'
+  _oembed_de966e5b30421522d355327a3271892b: '{{unknown}}'
+  _oembed_87cd5fc30a3d1a818b83f413701d0367: '{{unknown}}'
+  _oembed_a861c3332fd8fc558532f7e5ae1bbe25: '{{unknown}}'
+  _oembed_116b59cf2a75c35050e32442eaba6fb5: '{{unknown}}'
+  _oembed_908257e287aab6742dcc73bf7ded490b: '{{unknown}}'
+  _oembed_5f570cde0246c3294b05c7b8dbfc2a15: '{{unknown}}'
+  _oembed_e5f695506da2cc365f4ead759ea7a08a: '{{unknown}}'
+  _oembed_50834dcc263287fb1dc10a931434c2d5: '{{unknown}}'
+  _oembed_da5e27778927b4886e14e5991a346e44: '{{unknown}}'
+  _oembed_aa8add0f9f314336befad3e154864842: '{{unknown}}'
+  _oembed_47a787754ec7177c3f9008c084360ee3: '{{unknown}}'
+  _oembed_feb48d89fcf5f124c9fee7d5241ccfc0: '{{unknown}}'
+  _oembed_20fe283420f120c975cb47074a01676b: '{{unknown}}'
+  _oembed_0f8bf039030359564adabb12e67911e2: '{{unknown}}'
+  _oembed_29c4241a7c5485b139b02515667cf234: '{{unknown}}'
+  _oembed_089a214fc8ca4b13b5e925fc7ea21d18: '{{unknown}}'
+  _oembed_82d3e866b973d86556110ac528db0fc6: '{{unknown}}'
+  _oembed_dd3e59ac6435192196327b980ac6c7e5: '{{unknown}}'
+  _oembed_408b43711f40659759461c19d72cae44: '{{unknown}}'
+  _oembed_1b740c0965f488de9d6ee2cec3f10577: '{{unknown}}'
+  _oembed_d0fc09e5670c89c8f0cbd4af972913ee: '{{unknown}}'
+  _oembed_73bbbfc1dbec52a2ac03af46c05eb165: '{{unknown}}'
+  _oembed_1cf113739166b411062f89ddba4707d9: '{{unknown}}'
+  _oembed_b72e4647bad484ca769f9ee474d23bf9: '{{unknown}}'
+  _oembed_36c8fce6b4fe7fc64c6a51f44e97d799: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I have written a couple of post exploitation modules for Metasploit and have had fun doing it. I thought I would share a few tips for anyone else who wanted to write a post module.</p>
+<h3>Start with a Template</h3>
+<p>There are a number of good post exploitation modules available in the modules/post directory within the framework directory. Your best bet is to find one you like and then modify it. You need to pay particular attention to the initialize method of your post module. Here is an example:</p>
+<pre>
+def initialize(info={})
+  super( update_info( info,
+    'Name'          =&gt; 'Gather Linux System Information Enumeration',
+    'Description'   =&gt; %q{
+	This module gathers basic system information from Linux systems.
+	Enumerates users, hashes, services, network config, routing table, installed packages, 
+	,screenshot, and bash_history
+	},
+    'License'       =&gt; MSF_LICENSE,
+    'Author'        =&gt;
+	[
+	  'Stephen Haywood ',
+	  'sinn3r',  #Modified the original, and more testing
+	  'Carlos Perez ', # get_packages and get_services
+	],
+    'Version'       =&gt; '$Revision: 12842 $',
+    'Platform'      =&gt; [ 'linux' ],
+    'SessionTypes'  =&gt; [ "shell" ]
+  ))
+
+  register_options(
+    [
+      OptBool.new('VERBOSE', [false, 'Show detailed status messages', false]),
+    ], self.class)
+
+end
+</pre>
+<p>You need to modify the Name, Description, Author, Platform, and SessionTypes. You can also add options using the register_options method. </p>
+<h4>Registering Options</h4>
+<p>These are the options that are listed when you type <code>show options</code> at the msfconsole prompt. If you look at the option definition the first argument is the name of the option. The second argument is an array of values, the first says whether the option is required, the second is the description of the option, the third is the default value of the option. You do not have to define a default value.</p>
+<h4>SessionTypes</h4>
+<p>After you exploit a box you will have one of two types of sessions, either a meterpreter session or a shell session. When you define your post module you need to determine whether it will work with meterpreter or shell sessions or both. Keep in mind that meterpreter is not stable for all platforms and shell is not as capable as meterpreter. This means your module may run in only one session type. The best thing to do is test your module.</p>
+<h3>Don't Reinvent the Wheel</h3>
+<p>If you look in the lib/msf/core/post directory in the framework directory you will find a number of ruby modules that define methods that can be used in your post module by using the require statement. Here is an example:</p>
+<pre>
+require 'msf/core/post/common'
+require 'msf/core/post/file'
+</pre>
+<p>The common.rb file defines the cmd_exec method, which can be used to execute commands on your target whether you are using a meterpreter session or a shell session. The file.rb module defines methods to allow you to read, write, and append to files on the target machine. Use these methods.</p>
+<h3>Always Store your Loot</h3>
+<p>If your module is designed to gather data you should always store the data in the loot using the store_loot method. The store_loot method saves data in a unique file in your ~/.msf3/loot folder and adds indexing information to the metasploit database, if you are using it, to allow you to quickly find data stored in your loot folder. Here is a quick rundown of the store_loot method.</p>
+<pre>
+loot = store_loot(ltype, ctype, session, data, nil, info)
+</pre>
+<p>The ltype is the loot type, you can make this anything relevant. If you are gathering linux passwords it might be "linux.passwords". The ctype is the file or mime type. The session variable is already defined, it represents the session (meterpreter or shell) that you are currently in. The data variable holds the data you want to write to the file. Next is the filename, which you can leave as nil, and finally you have info, which is stored in the database and can be used to help you identify the data in the loot file. The store_loot method will return the full path of the loot file that was created.</p>
+<h3>Don't Forget to Run it</h3>
+<p>Metasploit uses the run method as the starting point to your module so make sure you define the run method. You can use as many other methods as you like but the run method is where you start.</p>
+<p>This tutorial is over for now. Go have fun and create some cool post modules. One more thing, if you have questions the #metasploit channel on irc.freenode.net is an excellent place to ask.</p>

@@ -1,0 +1,54 @@
+---
+layout: post
+title: Using Metasploit Templates to Bypass AV
+date: 2011-04-20 18:07:56.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+- Research
+tags:
+- antivirus
+- metasploit
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1357761908;}
+  _oembed_dce996577169dae88ee09bd90fcbec94: '{{unknown}}'
+  _oembed_9fe1b2aacc6b1e40d037be99b831f7c1: '{{unknown}}'
+  _oembed_937720b3c94ede9c7bfa3ee6409a828a: '{{unknown}}'
+  _oembed_0c9d01ae2af88c9132d45e93eb4fd4af: '{{unknown}}'
+  _oembed_318370373cdf682446b768e4f1ce5453: '{{unknown}}'
+  _oembed_48b45e4e23a107f8783a5162282bc8cd: '{{unknown}}'
+  _oembed_3c12a288057ca54bf75eeee0ee655179: '{{unknown}}'
+  _oembed_0500426e5aa00afe40877efe3d2e8d9e: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>When I do a penetration test I typically find some little hole someone forgot to patch, which I then use to get the local admin password. Most companies use the same local admin password on every machine, so my next step is to use the psexec module in Metasploit along with the admin credentials to get meterpreter sessions on as many machines as possible. The trouble is the exe that is copied to the victim machine by the psexec module is typically caught by the AV on the machine. Fortunately, Metasploit has built in tools to help you with AV evasion.</p>
+<h3>Metasploit Templates</h3>
+<p>Metasploit creates executable files by encoding a payload and then inserting the payload into a template executable file. The templates are in the data/templates folder. Metasploit includes templates for Windows, Mac, and Linux, templates for x86, x86_64, and ARM, and a template for Windows services. If you look in the data/templates/src folder you will find the source files for each of the templates.</p>
+<h3>Modifying the Templates</h3>
+<p>Each source file declares a variable to hold the payload and assigns it the value of "PAYLOAD:". The payload variable is 4096 bytes in some cases and 8192 bytes in others. Metasploit uses lib/msf/util/exe.rb to insert your payload by replacing the value "PAYLOAD:" with your encoded payload. You can use a custom template as long as it defines a variable of the right size and assigns it the value of "PAYLOAD:". For the service template you can also define a variable and assign it the value "SERVICENAME". Looking at the service.c template you can see the variable definitions:</p>
+<pre>
+#define PAYLOAD_SIZE	8192
+char cServiceName[32] = "SERVICENAME";
+char bPayload[PAYLOAD_SIZE] = "PAYLOAD:";
+</pre>
+<h3>Using a Custom Template</h3>
+<p>If executables built with the default template are getting caught by your AV then you will need to modify the source file, compile it, and then use the new executable as your template. If you are using msfencode it looks like this:</p>
+<pre>msfencode -t exe -x /path/to/template/template.exe</pre>
+<p>If you are using the psexec module then you can set the advanced options EXE::Template and EXE::Path.</p>
+<h3>Bypassing Antivirus</h3>
+<p>There is no tried and true technique for bypassing antivirus. You may find your AV product can be bypassed with simple modifications to the templates or you may find that it doesn't matter how you modify the template because the AV is picking up on the payload. This is when your encoding becomes important.<br />
+Here are a couple of things to keep in mind.</p>
+<ol>
+<li>People don't like to talk about how they bypass AV because the AV companies will develop a signature.</li>
+<li>Don't submit your AV bypass to VirusTotal or similar services because the AV companies use these services to develop new signatures.</li>
+<li>Setup a virtual machine with the AV you want to bypass, update it to the latest signatures then disconnect it from the network.</li>
+</ol>
+<p>UPDATE: I have rewritten this article and put it on the Metasploit documentation wiki you can find it <a href="http://dev.metasploit.com/redmine/projects/framework/wiki/Using_a_Custom_Executable_to_Bypass_AV">here</a>.</p>

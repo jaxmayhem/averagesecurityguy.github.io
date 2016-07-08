@@ -1,0 +1,47 @@
+---
+layout: post
+title: Announcing the Impending SSH Apocalypse
+date: 2013-01-03 11:30:37.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Pentest
+- Thoughts
+tags:
+- FUD
+- python
+- SSH
+- SSH Super Virus
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>The other day I read <a href="http://www.washingtontimes.com/news/2012/dec/25/glitch-imperils-swath-of-encrypted-records/?page=all" title="Glitch Imperils Swath of Encrypted Records">this article</a> by Shaun Waterman at the Washington Times and it ticked me off a bit because of its obvious FUD (fear, uncertainty, and doubt). Mr. Waterman tells us about a flaw in SSH that will bring about data destruction of apocalyptic proportions. The flaw of impending doom? Key management. Apparently people leave SSH private keys lying around unprotected and because of this "most of the data on the servers of every company in the developed world" could get "wiped out." I can't blame Mr. Waterman for that gem, he is quoting Tatu Ylonen, the CEO of SSH Communications Security Corp.</p>
+<p>I'm not saying SSH key management is not a problem. As a pentester, I look for unprotected SSH keys to dig my way deeper into a client's network. What I am saying is Mr Waterman and Mr. Ylonen are blowing this thing way out of proportion for no other reason than to sell SSH key management software, which SSH Communications Security Corp just happens to sell.</p>
+<p>My favorite part of the article was this quote: </p>
+<blockquote><p>
+Mr. Ylonen said a computer programmer could create a virus that would exploit SSH’s weaknesses and spread throughout servers to steal, distort or destroy confidential data.<br />
+“It would take days, perhaps only hours,” to write such a virus, he said.
+</p></blockquote>
+<p>So as not to disappoint Mr. Waterman and Mr. Ylonen, I decided to create an SSH super virus. It's actually a Python script, which you can get <a href="https://github.com/averagesecurityguy/scripts/blob/master/ssh_super_virus.py" title="SSH Super Virus Python Script">here</a>, and Mr. Ylonen was right, it only took me a few hours.</p>
+<p>To use the script, follow the instructions below:</p>
+<ol>
+<li>Create a directory and place all the private keys you want to test and ssh_super_virus.py in the directory.</li>
+<li>Create a file called 'hosts' in the same directory and add each host you want to test to the file, one per line.</li>
+<li>Create a file called 'users' in the same directory and add each user you want to test to the file, one per line.</li>
+</ol>
+<p>Ssh_super_virus.py will attempt to login to each host with each user/key combination. If a login is successful, ssh_super_virus.py will download all of the private keys in the users .ssh directory and test those against each user/host combination. You can also edit the script to add a list of evil_commands that will be run on successful login.</p>
+<p>As always, use the script only for legal purposes and let me know if there are any problems with the script.</p>

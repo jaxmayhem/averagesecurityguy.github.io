@@ -1,0 +1,41 @@
+---
+layout: post
+title: VMware Security Basics - Part 2
+date: 2011-09-11 22:32:29.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+- Thoughts
+- VMware
+tags:
+- best practices
+- VMware
+- VMware security
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1412814321;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>This is part 2 of a three part series on VMware Security Basics. Part 1 is <a href="http://wp.me/p1jUmx-4V" title="VMware security basics part 1">here</a>. The first part describes a typical ESX environment and the minimum considerations for the security of the storage system. This part describes the minimum security considerations for the ESX servers.<br />
+As a reminder, a typical ESX environment looks like the diagram below:<br />
+<img src="{{ site.baseurl }}/assets/vmware_diagram.png" alt="A Typical ESX Environment" /></p>
+<h3>ESX Servers</h3>
+<p>Four things to think about with the ESX servers are hardware redundancy, the server configuration, security update management, and the security levels of the guest operating systems.</p>
+<h4>Hardware Redundancy</h4>
+<p>Build each ESX server with redundant power supplies, processors, network cards, and host bus adapters (HBA). It is not enough to have a network card or HBA with two ports, two separate network cards and HBAs are necessary. In addition to redundant power supplies, consider using multiple UPS systems to provide battery backup to each server. The point is to ensure a single hardware failure does not take down the entire ESX server.</p>
+<p>For a production environment run a minimum of two ESX servers to provide adequate fail over protection. If only two servers are running then each server should be capable of handling the maximum load. The better option is to run the number of ESX servers needed plus one additional server. This configuration allows for server maintenance without affecting the overall performance of the ESX environment.</p>
+<h4>Server Configuration</h4>
+<p>Harden each ESX server before placing it into production. The <em>vSphere Hardening Guide</em> gives a number of recommendations for hardening the ESX server configuration. The recommendations are based on three trust levels: enterprise, DMZ, and specialized security limited functionality. The enterprise recommendations are appropriate for most production environments and provide the minimum protections required by all major security and compliance standards, the DMZ recommendations are for environments that are particularly susceptible to targeted attacks, and the specialized security limited functionality recommendations are for specialized environments that are vulnerable to sophisticated attacks.</p>
+<h4>Security Update Management</h4>
+<p>Just like any other operating system the ESX server requires security updates, which should be installed on a regular basis. The simplest way to manage security updates is to use the built-in update manager in vCenter, which can scan each ESX server to produce a list of missing updates and then install the missing updates.</p>
+<h4>Security Levels of the Guest OS</h4>
+<p>Each ESX server should be dedicated to hosting guest operating systems (OS) of the same security level. A guest OS connected to the production network will likely be configured and maintained more securely than a guest OS connected to a test network. These two guests should not run on the same ESX server because a compromise on the less secure test machine could lead to a compromise on the more secure production machine. </p>
+<h3>Conclusion</h3>
+<p>As stated earlier, this is the second part of a three part series. I plan to conclude this series next week with security considerations for the guest operating systems. Until then, remember to build each ESX server with hardware redundancy and each ESX environment with server redundancy, maintain a secure configuration on the ESX server, install security updates on the ESX server, and keep guest operating systems of differing security levels on separate ESX servers.</p>

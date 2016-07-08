@@ -1,0 +1,100 @@
+---
+layout: post
+title: Improving Brute force Attacks with Frequency Analysis
+date: 2011-02-07 12:12:13.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Password Cracking
+- Research
+tags:
+- password cracking
+meta:
+  _edit_last: '20119316'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  _oembed_68f037dabf7b3c33be01e9d511fe8476: '{{unknown}}'
+  _oembed_4294fe9b8ff11aae3920660cd524b674: '{{unknown}}'
+  _oembed_e42270bdc9c05fbb99491228755b2590: '{{unknown}}'
+  _oembed_0972cc584c8db60957f7a230c972a25c: '{{unknown}}'
+  _oembed_1820a34530d8293f786b521a3f3ed78d: '{{unknown}}'
+  _oembed_e64680e582638c08488be035bd52cb37: '{{unknown}}'
+  _oembed_a6bd80e1246d5ae617e296aa048fdbe9: '{{unknown}}'
+  _oembed_cf0d9407ef416b541d65972ff8bb9cea: '{{unknown}}'
+  _oembed_882b2ad1097fde92fdc6386d5fc8cb6f: '{{unknown}}'
+  _oembed_8b77998b51e04839b226cdf40cb05db2: '{{unknown}}'
+  _oembed_db079dbf648cf1f8279528d0e8ba2ba9: '{{unknown}}'
+  _oembed_753612011e6a1ba7a853a40540298b0b: '{{unknown}}'
+  _oembed_30ffa2b560f55b8cb1fec93abf011803: '{{unknown}}'
+  _oembed_969c3ad3ad43a7535a947ec22762335c: '{{unknown}}'
+  _oembed_605671f29abcbe2dcb736bc7775dcec9: '{{unknown}}'
+  _oembed_4a941fef1454f1fca17117081a730af1: '{{unknown}}'
+  _oembed_10c18b6cde80c4d6759dcfc717a5c9f0: '{{unknown}}'
+  _oembed_71d3fa236d07532e994aa13b374d2cbd: '{{unknown}}'
+  _oembed_42a991d7132d4744898b669c9361c6f2: '{{unknown}}'
+  _oembed_36f62ca7efe2d813e252b8e3c6d84d74: '{{unknown}}'
+  _oembed_c668da7a9aed89cfbc2b3a48c86acc86: '{{unknown}}'
+  _oembed_844934d0794d10dae231dcef22f13fda: '{{unknown}}'
+  _oembed_38f69182acd6414abc04b24e18143eff: '{{unknown}}'
+  _oembed_f4a2578df36312d6306328dcfb32c279: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>There are two primary methods for cracking passwords, dictionary attacks and brute force attacks. With both methods, a candidate password is generated and then hashed and compared to the hash of the missing password. If the hashes match, then we have found our password; otherwise, we move to the next candidate. In a dictionary attack the candidate passwords are generated using a word list. In some cases the words are modified to add capital letters, numbers or symbols. Dictionary attacks run much faster than a brute force attack because the number of candidate passwords is much smaller but there is no guarantee you will find the password. A brute force attack can guarantee you will find the password but can take a very long time to run.</p>
+<p>What I want to do is attempt to get the efficiency of a dictionary attack with the effectiveness of a brute force attack by looking at the frequency analysis of previously cracked passwords. <a href="http://www.skullsecurity.org/wiki/index.php/Passwords">Skull Security</a> maintains lists of previously cracked passwords, including passwords for phpbb, hotmail, and rockyou. I used a script to identify and count each character in each of the files. I then calculated the percent of total characters each character represents and then a cumulative percentage. Using these numbers I was able to find the character set that represented approximately 90% of all the characters in the file.</p>
+<table>
+<tr>
+<th>Filename</th>
+<th># of Chars in File</th>
+<th># of Chars in 90% Set</th>
+<th>90% Character Set</th>
+</tr>
+<tr>
+<td>Hotmail</td>
+<td>91</td>
+<td>29</td>
+<td>aeoi1r0ln2st9m8c3756u4dbphgyv</td>
+</tr>
+<tr>
+<td>phpbb</td>
+<td>119</td>
+<td>29</td>
+<td>aeoir1nstl02md3chpbu94k8576gy</td>
+</tr>
+<tr>
+<td>rockyou</td>
+<td>211</td>
+<td>29</td>
+<td>ae10i2onrls938t45m67cdyhubkgp</td>
+</tr>
+</table>
+<p>I was surprised to see how many characters overlapped in each of the 90% sets. Next, I used a script to determine how many passwords in each file could be found using only the characters in the 90% set. Then I combined each of the 90% sets and determined how many passwords in each file could be found using the combined set.</p>
+<table>
+<tr>
+<th>Filename</th>
+<th>% Passwords in 90% Set</th>
+<th>% Passwords in Combined Set</th>
+</tr>
+<tr>
+<td>Hotmail</td>
+<td>64</td>
+<td>77</td>
+</tr>
+<tr>
+<td>phpbb</td>
+<td>59</td>
+<td>74</td>
+</tr>
+<tr>
+<td>rockyou</td>
+<td>58</td>
+<td>73</td>
+</tr>
+</table>
+<p>In all three files the combined set found over 70% of the passwords. It looks like the frequency analysis could be useful in improving brute force password attacks. In another post I will put this theory to the test by attacking a different set of passwords.</p>
+<p>If you want an in depth study of character frequency analysis of password files then check out Matt Weir's work at <a href="http://reusablesec.blogspot.com/">reusablesec.blogspot.com.</a></p></p>

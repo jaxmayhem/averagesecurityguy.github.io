@@ -1,0 +1,36 @@
+---
+layout: post
+title: Creating a Custom Backdoor Part 1
+date: 2011-04-08 10:25:22.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Learn
+- Research
+tags:
+- encryption
+- metasploit
+- Offensive Security
+- python
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1413418491;}
+  _oembed_019f31ca68cef638fe97b0affd69e058: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Recently I was reading through <a href="http://www.offensive-security.com/metasploit-unleashed/Metasploit_Unleashed_Information_Security_Training">Metasploit Unleashed</a> at <a href="http://www.offensive-security.com">Offensive Security</a> and they were talking about setting up a backdoor using netcat as a reverse shell. After showing how to setup the backdoor they said that you should not use netcat in a pentest because there is no authentication or encryption. So I asked around on the #metasploit IRC channel to see what should be used instead. I received a few suggestions but was finally told people often use their own tool. So I thought I would write a quick python script to act as a reverse shell and include authentication and encryption. I would then convert it to an executable and load it on a victim machine.<br />
+What I want to build is a program that will make an outbound connection to a server, start up an interactive session with cmd.exe, and execute the commands I send it. I also need all communication to be encrypted. Since I wanted to convert this to an executable, I didn't want to use large python modules for fear they would increase the executable size. I also like things to be as simple as possible (I'm a little slow.)</p>
+<h3>Step 1: Interacting with CMD.exe</h3>
+<p>I had no idea how difficult this would be. What I needed was a way to open the cmd.exe process and pass in input and receive the output. Python has an excellent subprocess module that allows you to do this but all of the examples I found only allowed you to send one command and receive its output before terminating the process. Internet research and a quick discussion on #python lead me to <a href="http://www.noah.org/wiki/pexpect">pexpect</a>, which looks like an excellent module but was overkill for what I wanted. After a few more hours of research I finally stumbled upon this little gem of <a href="http://stackoverflow.com/questions/1124884/interact-with-a-windows-console-application-via-python">code</a>. This was exactly what I needed.</p>
+<h3>Step 2: Encrypting the Communications</h3>
+<p>This also turned out to be more difficult than I expected. I quickly found two python modules specifically for encryption, <a href="http://www.dlitz.net/software/pycrypto/">PyCrypto</a> and <a href="http://chandlerproject.org/bin/view/Projects/MeTooCrypto">M2Crypto</a>. After looking at both of them I again felt like they were overkill for what I wanted. Again, Google search persistence paid off and I found a pure python implementation of <a href="http://www.schneier.com/blowfish.html">Blowfish</a> written by Michael Gilfix, which he called <a href="http://felipetonello.com/scripts/python/blowfish.txt">blowfish.py</a>. This was perfect except his implementation doesn't encrypt strings of arbitrary length. So, I wrote a wrapper script called BlockCipher.py that would take in a string, add padding and then encrypt it. I also made it generic enough that I can add other algorithms later if I choose.</p>
+<h3>Step 3: Putting it all together</h3>
+<p>Well I'm still working on this part. Once I get it all together I will put up another entry. I hope to finish this in the next couple of weeks so keep checking back.</p>

@@ -1,0 +1,28 @@
+---
+layout: post
+title: SSH Pwnage
+date: 2013-01-10 15:58:15.000000000 -05:00
+type: post
+published: true
+status: publish
+categories: []
+tags:
+- Code
+- Pentest
+- SSH Apocalypse
+meta:
+  _publicize_pending: '1'
+  _wpas_done_648455: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>After telling you about the <a title="Impending SSH Apocalypse" href="http://averagesecurityguy.info/2013/01/03/announcing-the-impending-ssh-apocalypse/">impending SSH Apocalypse</a> and releasing the <a title="ssh_super_virus.py" href="https://github.com/averagesecurityguy/scripts/blob/master/ssh_super_virus.py">SSH super virus</a>, I received a number of good suggestions on improving my ssh_super_virus.py script. I didn't want to modify ssh_super_virus.py though because I want to keep it for posterity's sake. Instead I rewrote ssh_super_virus.py and included the suggested changes.</p>
+<p>So, I give you ssh_pwn.py. This script will read the 'users' file and the SSH keys in the current directory and use them to authenticate to the list of hosts in the 'hosts' file, also in the current directory. If authentication is successful, the script will attempt to download additional SSH keys, the .bash_history file for the user, and SSL private keys. In addition, the script can be configured to automatically add new users , from /etc/passwd, and new hosts, from .ssh/known_hosts, to the list of users and hosts to test. Finally, you can give ssh_pwn.py your own list of post exploitation commands, which it will attempt to run and will save the output in the 'postexploit' file in the current directory.</p>
+<p>You can get ssh_pwn.py from my <a title="Averagesecurityguy pentest scripts" href="https://github.com/averagesecurityguy/scripts">pentest scripts repository</a> at github.com. Enjoy, and as always let me know if there are any problems or if you have any suggested changes. </p>

@@ -1,0 +1,40 @@
+---
+layout: post
+title: Backtrack5 and Ruby 1.9.2
+date: 2011-05-12 21:31:44.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+tags:
+- Backtrack5
+- ruby
+- ruby 1.9
+meta:
+  _edit_last: '20119316'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1423197077;}
+  _oembed_fd8c0ae8a4b3e00997bbbc7b99b032ad: '{{unknown}}'
+  _oembed_cf64ae14abb1ec8140919a8c8de95737: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p><strong><em>Update:</em> I wrote this article before I realized that ubuntu and therefore BT5 comes with a script called update-alternatives. The update-alternatives script allows you to switch between different versions of java and ruby. If you are having trouble running a ruby script in BT5 try running <code>update-alternative --config ruby</code> and changing the ruby version. If that doesn't work then keep reading the rest of this article for other possible fixes.</strong></p>
+<p>I was playing around with BT5 today and noticed that it uses Ruby 1.9.2 as the default Ruby interpreter. Ruby 1.8 is installed as well if you would rather use it. To run a Ruby script using 1.8 just run <code>ruby1.8 script.rb</code>. If you come across a Ruby-based tool in BT5 that does not work then try running it using ruby1.8 before troubleshooting. If you want to run the script under Ruby 1.9.2 you may run into some problems I have listed a few below and how to fix them.</p>
+<h3>Problem 1: Load rubygems Before Loading Installed Gems</h3>
+<p>Often times when running a Ruby script that requires gems Ruby has to be told to load 'rubygems' before it loads installed gems. This can be done either by adding <code>require 'rubygems'</code> to each Ruby script before <code>require</code>ing other gems or by setting the environment variable RUBYOPT. To set the environment variable add the line <code>export RUBYOPT="rubygems"</code> to your .bashrc file in your home directory and then run <code>source .bashrc</code></p>
+<h3>Problem 2: Tell Ruby Where to Find the Gems</h3>
+<p>For whatever reason Ruby cannot find the gems loaded for Ruby 1.9.2. To fix this set the environment variable GEM_HOME by adding the line <code>export GEM_HOME=/var/lib/gems/1.9.2</code> to the .bashrc file in your home directory. You will need to run <code>source .bashrc</code> for the changes to take effect.</p>
+<h3>Problem 3: You cannot Require Files in the Current Directory</h3>
+<p>For security reasons Ruby 1.9.2 does not search the current directory when looking for <code>require</code>d files. There are three options for dealing with this:</p>
+<ul>
+<li>The easiest way to correct this is to change the line <code>require 'cewl_lib'</code> to <code>require './cewl_lib'</code>, which defeats the purpose of not searching the current directory.</li>
+<li>Another method would be to move cewl_lib.rb to a lib folder and change <code>require 'cewl_lib'</code> to <code>require_relative 'lib/cewl_lib'</code>. This is not backward compatible with Ruby 1.8.7</li>
+<li>A third option is to modify <code>require 'cewl_lib'</code> to <code>require File.expand_path(File.join(File.dirname(__FILE__), 'cewl_lib'))</code>, which is backward compatible with Ruby 1.8.7. This is the method I used.</li>
+</ul>

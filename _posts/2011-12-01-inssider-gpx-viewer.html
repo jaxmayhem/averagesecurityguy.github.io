@@ -1,0 +1,42 @@
+---
+layout: post
+title: InSSIDer GPX Viewer
+date: 2011-12-01 21:45:02.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+tags:
+- gpx
+- inssider
+- viewer
+- wireless
+meta:
+  _wpas_skip_linkedin: '1'
+  _edit_last: '20119316'
+  _wpas_skip_twitter: '1'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1405371913;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I have started using Inssider from metageek.com to do wireless surveys for clients. I like the program but it doesn't have a method for viewing previously saved GPX log files. I know the files can be converted to KML and displayed in Google Earth or Google Maps but what I wanted was a simple way to parse the file for a list of wireless access points. I couldn't find anything that simple so I wrote a ruby script.</p>
+<p>Gpx_view.rb reads a GPX file and outputs the wireless access points identified in the file. The output format can be short or long. The short format prints each wireless access point once while the long format prints each instance of the wireless access point. The default format is short. To format the output, I used the table formatting code from the Rex library in metasploit. I didn't want to install the entire Rex gem, which you can get <a href="https://github.com/hammackj/rex">here</a>, so I copied the file lib/rex/ui/text/table.rb from the gem and made it a standalone module. You can download gpxview.rb and rextable.rb from <a href="https://github.com/averagesecurityguy/scripts">github.</a></p>
+<p>Here's a sample of the short format:</p>
+<pre>
+
+MAC Address        SSID      RSSI  Channel  Encryption  Quality
+-----------        ----      ----  -------  ----------  -------
+XX:XX:XX:XX:XX:XX            -58   6        WEP         73
+XX:XX:XX:XX:XX:XX            -49   6        RSNA-CCMP   91
+XX:XX:XX:XX:XX:XX            -55   6        RSNA-CCMP   91
+XX:XX:XX:XX:XX:XX            -51   1        RSNA-CCMP   90
+XX:XX:XX:XX:XX:XX            -53   11       RSNA-CCMP   90
+XX:XX:XX:XX:XX:XX            -62   11       RSNA-CCMP   88
+XX:XX:XX:XX:XX:XX            -58   6        RSNA-CCMP   90
+XX:XX:XX:XX:XX:XX            -51   1        RSNA-CCMP   91
+</pre>

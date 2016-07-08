@@ -1,0 +1,39 @@
+---
+layout: post
+title: Facebook WTF?
+date: 2013-06-02 18:01:11.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Research
+- Social Engineering
+- Thoughts
+tags: []
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  publicize_reach: a:2:{s:7:"twitter";a:1:{i:648456;i:782;}s:2:"wp";a:1:{i:0;i:31;}}
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I do not use Facebook and after a few years, I finally convinced my wife to give it up. In my opinion, the social benefits of Facebook are far outweighed by the privacy and security concerns. To demonstrate, my father-in-law recently received a phishing message through facebookmail, see the screenshot below.</p>
+<p><a href="http://averagesecurityguy.files.wordpress.com/2013/05/facebook_phish.png"><img src="{{ site.baseurl }}/assets/facebook_phish.png" alt="facebook_phish" width="500" height="285" class="alignnone size-full wp-image-883" /></a></p>
+<p>The email has all the typical signs of a phishing email including the bad grammar and the FUD meant to get you to click on the link. The only problem is the link is a legitimate Facebook URL. Confused, I fired up a VM and visited the link, which took me to this page.</p>
+<p><a href="http://averagesecurityguy.files.wordpress.com/2013/05/facebook_leaving1.png"><img src="{{ site.baseurl }}/assets/facebook_leaving1.png" alt="facebook_leaving" width="500" height="204" class="alignnone size-full wp-image-889" /></a></p>
+<p>The page appears to be a security warning with a URL at the bottom. I think most Facebook users would see this as normal and click Continue. In fact, the page is designed to let you know you are leaving Facebook to go to the displayed URL but the only indication that you are leaving Facebook is the title of the page.</p>
+<p><a href="http://averagesecurityguy.files.wordpress.com/2013/05/facebook_leaving_title.png"><img src="{{ site.baseurl }}/assets/facebook_leaving_title.png" alt="facebook_leaving_title" width="252" height="36" class="alignnone size-full wp-image-886" /></a></p>
+<p>I thought to myself, "That can't be right, maybe a logged in user gets a different message". So, I created an account and visited the link again. This time I got a warning message letting me know the link was potentially spammy.</p>
+<p><a href="http://averagesecurityguy.files.wordpress.com/2013/05/facebook_leaving_warning.png"><img src="{{ site.baseurl }}/assets/facebook_leaving_warning.png" alt="facebook_leaving_warning" width="500" height="167" class="alignnone size-full wp-image-887" /></a></p>
+<p>Excellent, Facebook is watching out for it's users and protecting them from spammy links. Not so fast. If you look at the phishing URL closely, you can see it has three parts: http://www.facebook.com/l/, a random string, and the redirect URL. I decide to make some changes to the phishing URL and see what would happen.</p>
+<p>If you modify the random string the warning message is no longer displayed because Facebook doesn't recognize this new URL as malicious. This means that Facebook is detecting the malicious link on the full URL and not on the redirected URL. Based on this, it seems that scammers could setup one site and create many different URLs to redirect to this one site and they would likely never be caught by Facebook.</p>
+<p>To prevent problems With these type of links, Facebook should make it very clear that the user is leaving Facebook to go to a new site, a message in the page title is not enough. In addition, Facebook should determine if a link is "spammy" based on the destination URL not based on the original URL.</p>
+<p>I reported this as a potential bug but Facebook didn't seem to see it as a bug. Maybe I'm crazy, what do you think?</p>

@@ -1,0 +1,52 @@
+---
+layout: post
+title: Text Tables in Python
+date: 2012-11-28 10:08:01.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+tags:
+- python
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  _wpas_done_648455: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  publicize_reach: a:2:{s:7:"twitter";a:1:{i:648456;i:589;}s:2:"wp";a:1:{i:0;i:20;}}
+  _wpas_skip_648456: '1'
+  _wpas_skip_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>At Tenable, I write text-based, single-purpose API tools in Python. I often need to display data in table format and wanted an easy way to do this. So, I wrote a simple Python module to draw text tables. Texttable allows you to add a header, column names, and specify column alignments. You can get the code <a href="https://github.com/averagesecurityguy/scripts/blob/master/texttable.py" title="Texttable module on Github">here</a>.</p>
+<h3>Usage</h3>
+<pre>
+import texttable
+
+t1 = texttable.TextTable()
+t1.header = 'A Table of Numbers'
+t1.add_col_names(['Col1', 'Col2', 'Col3', 'Col4'])
+t1.add_col_align(['&lt;', '&lt;', '^', '&gt;'])
+rows = [[1, 2, 3, 4],
+        [5, 6, 7, 8],
+        [9, 10, 11, 12],
+        [111111, 22222222, 3333333333, 444444444444]]
+t1.add_rows(rows)
+print t1
+    
+t2 = texttable.TextTable()
+t2.header = 'Another Table of Numbers'
+t2.add_col_names(['Col1', 'Col2', 'Col3', 'Col4'])
+t2.add_row([1, 2, 3, 4])
+t2.add_row([5, 6, 7, 8])
+t2.add_row([9, 10, 11, 12])
+print t2
+</pre>

@@ -1,0 +1,77 @@
+---
+layout: post
+title: Will Write Code For Friends
+date: 2013-08-16 10:30:29.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Pentest
+tags:
+- Network Scanning
+- Nmap
+- python
+meta:
+  _edit_last: '20119316'
+  geo_public: '0'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>The other day my friend <a href="https://twitter.com/Slad3G" title="Slade on Twitter">Slade</a> asked me to write a script to take an address range and run an Nmap ping scan against it and then run a SYN scan against only the live hosts using a predefined set of ports. Finally, he wanted a simple output showing the hosts and  only the open ports. So, I put together <a href="https://github.com/averagesecurityguy/scripts/blob/master/discover.py" title="Discover.py on Github">this short Python script</a>. The usage is below:</p>
+<pre>
+USAGE:
+
+discover.py IP_addresses '
+
+Addresses must be a valid Nmap IP address range and ports
+must be a valid Nmap port list. Any ports provided will be
+added to the default ports that are scanned: 21, 22, 23,
+25, 53, 80, 110, 119, 143, 443, 135, 139, 445, 593, 1352,
+1433, 1498, 1521, 3306, 5432, 389, 1494, 1723, 2049, 2598,
+3389, 5631, 5800, 5900, and 6000. The script should be run
+with root privileges.
+</pre>
+<p>The script uses the -oA switch to save the Nmap results for both the ping scan and the SYN scan. The gnmap file from the SYN scan is then parsed to produce a simple Markdown file that looks like this:</p>
+<pre>
+192.168.1.2
+===========
+
+OS
+--
+HP Officejet J4680 printer|HP PhotoSmart C390 or C4780; or
+Officejet 6500, 7000, or 8500 printer|HP Photosmart C4500
+or C7280, or Officejet J6450 printer
+
+Ports
+-----
+tcp/80 (open) - Virata-EmWeb 6.2.1 (HP Photosmart C4700
+series printer http config)
+tcp/ 139 (open) - tcpwrapped
+tcp/ 445 (open) - netbios-ssn
+
+
+192.168.1.1
+===========
+
+OS
+--
+Apple AirPort Extreme WAP or Time Capsule NAS device (NetBSD
+4.99), or QNX 6.5.0
+
+Ports
+-----
+tcp/53 (open) - domain?
+</pre>
+<p>In addition to the discover.py script, I created the gnmap2md.py script which converts gnmap formatted files into Markdown formatted files. You can get it <a href="https://github.com/averagesecurityguy/scripts/blob/master/gnmap2md.py" title="gnmap2md.py script on Github">here</a>.<br />
+As always, I hope you enjoy the script and let me know if you have any trouble with it.</p>

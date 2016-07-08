@@ -1,0 +1,68 @@
+---
+layout: post
+title: Morse Code Ping
+date: 2011-02-11 00:39:58.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+tags: []
+meta:
+  _edit_last: '20119316'
+  _wpas_skip_linkedin: '1'
+  _wpas_skip_twitter: '1'
+  _oembed_7e67d618dfec031eea4e2d802b6ace02: '{{unknown}}'
+  _oembed_8edec934f6f8e7fc5e868f88995de114: '{{unknown}}'
+  _oembed_dd402b2a23b2ef64ed829df5f4c50d08: '{{unknown}}'
+  _oembed_c32debdab47cc2ac5d297275c70a4c75: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I saw <a href="http://twitter.com/#!/indi303/status/35846206198382592">this</a> on twitter. So I made this. It uses the TTL on the ping packet to represent a '.', '-', or ' '. Don't know if this works but here it is.</p>
+<pre>import random
+import os
+
+code = {'A': '.-', 'B': '-...', 'C': '-.-.', 'D': '-..', 'E': '.',
+        'F': '..-.', 'G': '--.', 'H': '....', 'I': '..', 'J': '.---',
+        'K': '-.-', 'L': '.-..', 'M': '--', 'N': '-.', 'O': '---',
+        'P': '.--.', 'Q': '--.-', 'R': '.-.', 'S': '...', 'T': '-',
+        'U': '..-', 'V': '...-', 'W': '.--', 'X': '-..-', 'Y': '-.--',
+        'Z': '--..', '0': '-----', '1': '.----', '2': '..---', '3': '...--',
+        '4': '....-', '5': '.....', '6': '-....', '7': '--...', '8': '---..',
+        '9': '----.', ',': '--..--', '.': '.-.-.-', ' ': ' ', '_': '..--.-',
+        '?': '..--..', ';': '-.-.-.', ':': '---...', "'": '.----.',
+        '-': '-....-', '/': '-..-.', '(': '-.--.-', ')': '-.--.-' }
+    
+def encode(s):
+    mstr = ''
+    for c in s:
+        mstr += code[c]
+    return mstr
+   
+def mstr2packets(d, mstr):
+    """Send ICMP packet with ttl within certain range to represent a '.', '-',
+    or ' '. ttl &lt; 80 = &#039;.&#039;, 80 &lt; ttl &lt; 160 = &#039;-&#039;, 160 &lt; ttl = &#039; &#039; &quot;&quot;&quot;
+    for c in mstr:
+        if c == &#039;.&#039;:
+            t = random.randrange(24,80)
+        elif c == &#039;-&#039;:
+            t = random.randrange(104,160)
+        elif c == &#039; &#039;:
+            t = random.randrange(184,254)
+        else:
+            pass
+        ping = &#039;ping -n 1 -i &#039; + str(t) + &#039; &#039; + d
+        print ping
+        os.system(&#039;ping -n 1 -i &#039; + str(t) + &#039; &#039; + d)
+        
+word = &quot;a&quot;
+mstr = encode(word.upper())
+dest = &#039;192.168.170.1&#039;
+mstr2packets(dest, mstr)
+</pre>

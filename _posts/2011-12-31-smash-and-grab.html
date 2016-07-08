@@ -1,0 +1,36 @@
+---
+layout: post
+title: The Smash and Grab Pentest
+date: 2011-12-31 01:47:34.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Pentest
+- Thoughts
+tags:
+- ophcrack
+- penetration testing execution standard
+- PTES
+- rcracki
+- rcracki_mt
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1361214011;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Penetration testing is a lot like stealing jewelry. There are two basic options, either plan the heist carefully, cut the alarm, pick the lock, and blackout the security cameras or kick in the front door, bust open the jewelry cases, stuff your bags, and get out before the cops show up. Of course the best option is to take the time to plan the heist because if it's done correctly no one gets arrested and a lot of money is made. Sometimes though, the smash and grab is the only option available.</p>
+<p>To perform a carefully planned penetration test, study the Penetration Testing Execution Standard (PTES) at <a href="http://www.pentest-standard.org/index.php/Main_Page" title="penetration testing execution standard">pentest-standard.org</a>. This is how every penetration test should be done but unfortunately, the sales guys and management haven't read the PTES and therefore don't allocate enough time or money to do a proper pentest. This is when the smash and grab becomes necessary.</p>
+<h3>Kick In the Front Door</h3>
+<p>Use the <a href="http://www.secmaniac.com/download/" title="social engineer toolkit">social engineer toolkit (SET)</a> to get meterpreter or shell access to an internal box, which is easier than it should be. Other options include <a href="http://averagesecurityguy.info/2011/12/09/owning-a-coldfusion-server/" title="owning a cold fusion server">owning a ColdFusion server</a> or finding a Tomcat Manager server or other admin console with weak or default credentials. </p>
+<h3>Bust Open the Jewelry Cases</h3>
+<p>After gaining administrative access to a machine, dump the password hashes and crack them; <a href="http://ophcrack.sourceforge.net/" title="ophcrack">Ophcrack</a> or <a href="http://sourceforge.net/projects/rcracki/" title="rcracki_mt website">rcracki_mt</a> are particularly good at cracking LM hashes. Typically, the local administrator password is shared among machines throughout the internal network.</p>
+<p>Another option is to migrate into a process that is running as a domain administrative user. There may be a service set to run under a domain admin account or the user on the box may have domain administrative privileges. If I get domain admin privileges this way I like to create my own domain admin account using <code>net user username password /ADD /DOMAIN</code> and <code>net group "Domain Admins" username /ADD /DOMAIN</code>. Make sure to remove the account when finished using <code>net user username /DELETE /DOMAIN</code>.</p>
+<h3>Stuff the Bags</h3>
+<p>After gaining administrative access to multiple machines, mount Windows shares on as many boxes as possible and look for sensitive data. Focus particularly on the data that makes the client money.</p>
+<p>That is the basic smash and grab method I use on a regular basis. Feel free to share your smash and grab strategy as well.</p>

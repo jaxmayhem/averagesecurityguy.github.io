@@ -1,0 +1,125 @@
+---
+layout: post
+title: OpenVAS and Metasploit Integeration
+date: 2011-10-10 11:34:32.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Metasploit
+- OpenVAS
+- Pentest
+tags:
+- metasploit
+- OpenVAS
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1361214029;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Metasploit includes an OpenVAS module, which allow you to interact with an OpenVAS server to create targets, run scans, download reports, and import reports. Recently I had the opportunity to make some updates to the module and wanted to write a blog post to document how to use it. This blog post does not cover how to setup an OpenVAS server but you can find that info <a href="http://www.ehacking.net/2011/06/backtrack-5-openvas-tutorial.html" title="OpenVAS4 in Backtrack 5">here</a> and <a href="www.openvas.org/install-packages.html" title="OpenVAS Installation">here</a>. Before I go any further, I need to thank George Birmingham for reporting the bugs in the original code and for helping me test the updates. His comments and suggestions were invaluable.</p>
+<p>To use the OpenVAS integration you need to load the openvas module within msfconsole. Do this by running the command <code>load openvas</code>. The updates to the openvas module were accepted in revision 13851, so you may need to use <code>msfupdate</code> to get the updated modules.</p>
+<p>After the module is loaded, the workflow is very basic. Start by connecting to the server using the command <code>openvas_connect</code>. If you connect to a host other than localhost or 127.0.0.1, then you will need to pass an additional paramater of "ok" to the command. If you forget the "ok" parameter you will be warned that there is no SSL support and your interaction with the server is not secure. Also, you need to use the port for the OpenVAS manager server, openvasmd, which defaults to 9390.</p>
+<pre>
+msf &gt; openvas_connect sbh sbh 127.0.0.1 9390
+[*] Connecting to OpenVAS instance at 127.0.0.1:9390 with username sbh...
+[+] OpenVAS connection successful
+
+</pre>
+<p>Next, create a target to scan using the command <code>openvas_target_create</code>. If you want spaces in the name or comment then make sure you place quotations around them.</p>
+<pre>
+msf &gt; openvas_target_create "Local Machine" 192.168.70.128 "My Local Machine"
+[*] OK, resource created: db1175ac-b40b-4b13-9a80-24b68c2c6b40
+[+] OpenVAS list of targets
+
+ID  Name           Hosts           Max Hosts  In Use  Comment
+--  ----           -----           ---------  ------  -------
+0   Localhost      localhost       1          1       
+1   Local Machine  192.168.70.128  1          0       My Local Machine
+</pre>
+<p>Next, create a task by specifying a target and a configuration. Use the command <code>openvas_config_list</code> to get a list of configurations and the command <code>openvas_target_list</code> to get a list of targets.</p>
+<pre>
+msf &gt; openvas_config_list
+[+] OpenVAS list of configs
+
+ID  Name
+--  ----
+0   Full and fast
+1   Full and fast ultimate
+2   Full and very deep
+3   Full and very deep ultimate
+4   empty
+
+msf &gt; openvas_task_create "Local Scan" "Scan My Local Machine" 0 1
+[*] OK, resource created: 483c6f03-6490-4de2-bd81-c1c5b217d950
+[+] OpenVAS list of tasks
+
+ID  Name        Comment                Status  Progress
+--  ----        -------                ------  --------
+0   Local Scan  Scan My Local Machine  New     -1
+</pre>
+<p>Next, start the task with <code>openvas_task_start</code> and watch the progress using <code>openvas_task_list</code>.</p>
+<pre>
+msf &gt; openvas_task_start 0
+[*] OK, request submitted
+msf &gt; openvas_task_list
+[+] OpenVAS list of tasks
+
+ID  Name        Comment                Status   Progress
+--  ----        -------                ------   --------
+0   Local Scan  Scan My Local Machine  Running  2
+
+msf &gt; openvas_task_list
+[+] OpenVAS list of tasks
+
+ID  Name        Comment                Status   Progress
+--  ----        -------                ------   --------
+0   Local Scan  Scan My Local Machine  Running  98
+
+msf &gt; openvas_task_list
+[+] OpenVAS list of tasks
+
+ID  Name        Comment                Status  Progress
+--  ----        -------                ------  --------
+0   Local Scan  Scan My Local Machine  Done    -1
+</pre>
+<p>Once the scan is finished, the progress is -1, list the available reports using <code>openvas_report_list</code>.</p>
+<pre>
+msf &gt; openvas_report_list
+[+] OpenVAS list of reports
+
+ID  Task Name     Start Time                Stop Time
+--  ---------     ----------                ---------
+0   Example task  Tue Aug 25 21:48:25 2009  Tue Aug 25 21:52:16 2009
+1   testtask      Fri Sep 16 14:21:31 2011  Fri Sep 16 14:23:09 2011
+2   Local Scan    Fri Oct  7 22:52:46 2011  Fri Oct  7 23:04:48 2011
+</pre>
+<p>Next, you can download (<code>openvas_report_dowload</code>) or import (<code>openvas_report_import</code>) the report. You must specify the report format with either command. You can get a list of formats using <code>openvas_format_list</code>. When importing a report you must use the NBE format. Also note, that when trying to download an ITG or PDF report my OpenVAS server returns an empty report, YMMV.</p>
+<pre>
+msf &gt; openvas_format_list
+[+] OpenVAS list of report formats
+
+ID  Name   Extension  Summary
+--  ----   ---------  -------
+0   CPE    csv        Common Product Enumeration CSV table.
+1   HTML   html       Single page HTML report.
+2   ITG    csv        German "IT-Grundschutz-Kataloge" report.
+3   LaTeX  tex        LaTeX source file.
+4   NBE    nbe        Legacy OpenVAS report.
+5   PDF    pdf        Portable Document Format report.
+6   TXT    txt        Plain text report.
+7   XML    xml        Raw XML report.
+
+msf &gt; openvas_report_download 2 1 /root/ov/reports
+[*] Saving report to /root/ov/reports/report-d76434b0-38e6-462c-87e1-717622056e86.html
+
+msf &gt; openvas_report_import 2 4
+[*] Importing report to database.
+</pre>
+<p>You can see all the available commands using the command <code>openvas_help</code>. If you have any questions or find any bugs in the openvas module let me know at averagesecurityguy [at] gmail [dot] com so I can fix them. If you want to look at the code, it is in /opt/framework/msf3/plugins/openvas.rb and /opt/framework/msf3/lib/openvas/openvas-omp.rb. Enjoy.</p>

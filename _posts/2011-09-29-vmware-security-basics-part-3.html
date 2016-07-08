@@ -1,0 +1,40 @@
+---
+layout: post
+title: VMware Security Basics - Part 3
+date: 2011-09-29 21:01:58.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+- VMware
+tags:
+- VMware
+- VMware security
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1412812251;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>This is the final entry of a three part series on VMware Security Basics. Part 1 is <a href="http://wp.me/p1jUmx-4V" title="VMware security basics part 1">here</a> and part 2 is <a href="http://wp.me/p1jUmx-55" title="VMware security basics part 2">here</a>. The first part describes a typical ESX environment and the minimum considerations for the security of the storage system, the second part describes security considerations for the ESX servers, and this part describes security considerations for the guest operating systems.<br />
+As a reminder, a typical ESX environment looks like the diagram below:<br />
+<img src="{{ site.baseurl }}/assets/vmware_diagram.png" alt="A Typical ESX Environment" /></p>
+<h3>Guest Operating Systems</h3>
+<p>The thing to remember with guest operating systems is they are just like any other computer on the network and must be secured appropriately.</p>
+<h4>Secure the Guest OS</h4>
+<p>Each guest OS should be hardened to match the security context in which it resides and all security updates should be applied. If possible create a hardened template and use the template to deploy new VMs. The template should be updated regularly to apply new security updates. In addition to security updates for the OS, apply security updates for third-party applications as well.</p>
+<h4>Keep VMware Tools Updated</h4>
+<p>In most ESX environments, VMware Tools is installed on the guest operating systems. Just like any other software VMware Tools must be updated regularly to apply security updates.</p>
+<h4>Virtual Machines are Files</h4>
+<p>Virtual machines are files and can be copied and pasted like any other file. Control who is allowed to move or copy VM files and where VM files can be stored. Backups of virtual machines should be encrypted.</p>
+<h4>Backup Your Virtual Machines</h4>
+<p>Having a redundant storage system and replication does not take the place of backups. Virtual machine files can be corrupted like any other files. Replication will give you multiple copies of a corrupted VM, it won't allow you to restore a good copy of the VM.</p>
+<h4>Watch Out for Dormant VMs</h4>
+<p>Dormant VMs are machines that have been shutdown and left unused for a while. These machines are typically missing critical security updates and pose a risk to the network when they are brought back online. Virtual machines that are no longer needed should be backed up and removed from production ESX servers. If it is necessary to use a dormant VM, then it should be brought online in a test environment so that security updates can be applied before placing it back into production.</p>
+<h4>Conclusion</h4>
+<p>I hope you found this series of blog entries useful for securing your VMware environment. If you want more information please read the resources listed at the beginning of part 1, which is <a href="http://wp.me/p1jUmx-4V" title="VMware security basics part 1">here</a>.</p>

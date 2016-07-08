@@ -1,0 +1,48 @@
+---
+layout: post
+title: VMware Security Basics
+date: 2011-09-04 21:24:09.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+- Thoughts
+- VMware
+tags:
+- best practices
+- VMware
+- VMware security
+meta:
+  _edit_last: '20119316'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1423194367;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>Virtualization is complex and there are many moving parts. I can not speak to all the details of hardening a VMware environment but I can speak to the minimum things to consider when installing or maintaining a VMware environment. For more advice, look at these documents:</p>
+<ul>
+<li><a href="http://www.vmware.com/resources/techresources/10109" title="vSphere 4.0 hardening guide">vSphere 4.0 Security Hardening Guide</a></li>
+<li><a href="https://benchmarks.cisecurity.org/tools2/vm/CIS_VMware_ESX_Server_4_Benchmark_v1.0.0.pdf" title="CIS Benchmarks for VMware ESX 4">Security Configuration Benchmarks for VMware ESX 4</a></li>
+<li><a href="https://www.pcisecuritystandards.org/documents/Virtualization_InfoSupp_v2.pdf" title="PCI DSS Virtualization Guidelines">PCI DSS Virtualiztion Guidelines</a></li>
+<li><a href="http://www.sans.org/reading_room/analysts_program/vmware-guide-may-2010.pdf" title="A guide to virtualization hardening guides">A Guide to Virtualization Hardening Guides</a></li>
+</ul>
+<h3>A Typical ESX Environment</h3>
+<p>A typical ESX environment will have one or more ESX servers connected to a shared storage system such as a fiber channel or iSCSI SAN. Each ESX server will have one or more guest operating systems, each with VMware tools and a myriad of applications installed. This can be seen in the figure below:<br />
+<img src="{{ site.baseurl }}/assets/vmware_diagram.png" alt="A Typical ESX Environment" /><br />
+In this environment there are three major areas of concern: the storage system, the ESX servers, and the guest operating systems.</p>
+<h3>Storage Systems</h3>
+<p>Four things to think about with storage systems are data availability, traffic isolation, the security levels of the ESX servers sharing the storage systems, and which ESX servers are allowed to see which data sets.</p>
+<h4>Data Availability</h4>
+<p>Whatever storage system is used, fiber channel or iSCSI, ensure there are multiple data paths between the storage system and the ESX servers. This includes dual controllers on the SAN, dual switches, redundant power sources for the SAN, and dual host bus adapters (HBA) on the ESX server. It is not enough to have a single HBA with dual ports, two HBAs are necessary. Before the system goes into production, testing should be done to ensure a single device failure does not prevent the ESX server from accessing the data.</p>
+<h4>Traffic Isolation</h4>
+<p>Traffic isolation is of particular concern in iSCSI systems because they use the same basic infrastructure as a standard network. All iSCSI traffic should be segmented from the rest of the network traffic to prevent an attacker from sniffing the iSCSI data. I am not a fan of using VLANs to segment traffic of differing security levels and always recommend physically segmenting iSCSI traffic from the rest of the network.</p>
+<h4>Shared Storage for ESX Servers with Differing Security Levels</h4>
+<p>ESX servers in differing security levels are configured and maintained differently. An ESX server setup as a lab environment is not going to be hardened to the same level as an ESX server holding the companies production systems and those two ESX servers should not share the same storage. An attacker who gained access to the weaker ESX server could use it to attempt to gain access to the production data on the shared storage system.</p>
+<h4>Share Data Volumes with the Appropriate ESX Servers</h4>
+<p>On a typical SAN, multiple data volumes are configured and each one is assigned a SCSI logical unit number (LUN), which is used to uniquely identify that volume. The SAN can then be configured to only allow specific HBAs to access specific LUNs. As an example, in a group of ESX servers only two of those servers may need access to the LUN that holds the HR data, the SAN should be configured so only the HBAs in those ESX servers have access to the LUN with HR data.</p>
+<h3>Conclusion</h3>
+<p>As stated earlier there are three major areas of concern with a production VMware environment, the storage system, the ESX servers, and the guest operating systems. I will discuss the latter two in upcoming blog entries. For now, remember to configure and test multiple paths to the data on the storage system, to isolate iSCSI traffic from the rest of the network, to keep ESX servers of differing security levels from sharing the same storage system, and to only share data sets with the appropriate ESX servers.</p>

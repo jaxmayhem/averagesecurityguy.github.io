@@ -1,0 +1,37 @@
+---
+layout: post
+title: ADSelfService Plus Account Enumeration
+date: 2013-04-05 11:30:38.000000000 -04:00
+type: post
+published: true
+status: publish
+categories: []
+tags: []
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+  _wpas_done_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>On a recent pentest I came across an externally accessible <a href="http://www.manageengine.com/products/self-service-password/index.html" title="ADSelfService Plus by ManageEngine">ADSelfService Plus</a> server. ADSelfService Plus is sold by ManageEngine and is designed to allow users to reset and unlock their own Active Directory (AD) accounts. To use the service, the user is required to register and configure multiple security questions. After playing with the server for a while, I determined that attempting to reset the password of an unregistered user resulted in an error while attempting to reset the password of a registered user displayed the user's security questions. This meant I could enumerate user accounts and the associated security questions. </p>
+<p>Using Python and a list of common first and last names I developed a script, ad_self_service_miner.py, that would enumerate user accounts and capture the security questions. The script is available on my <a href="https://github.com/averagesecurityguy/scripts">Github account</a>. To use the script you will need to set the server and domain. The domain information is available on the account reset page.</p>
+<pre>
+server = 'https://server'
+domain = 'DOMAIN'
+</pre>
+<p>You will also need to modify the username format. In my case the username was First.Last. Keep in mind that in most Windows environments the AD username typically matches the username portion of the email address, so a quick Google search should yield the correct username format. </p>
+<pre>
+user = "{0}.{1}".format(f.capitalize(), l.capitalize())
+</pre>
+<p>After you modify the script, get a list of first names and last names and save them to firstnames.txt and lastnames.txt, respectively, in the same directory as the script. Finally, let the script run. All user accounts and security questions will be stored in <code>ad_self_service_miner.log</code> also in the same directory as the script.</p>
+<p>I tested approximately 20,000 username combinations and was able to enumerate 132 user accounts along with the associated security questions. The hard part is going through the process of finding the answers to the questions, which I didn't do on this engagement.</p>
+<p>You can find ADSelfService Plus devices using <a href="https://www.google.com/search?q=inurl%3AshowLogin.cc" title="Google dork for ADSelfService Plus servers">this Google search</a>.</p>
+<p>I spoke with ManageEngine about this vulnerability and was informed that there is a configuration setting to place a CAPTCHA on the account reset page, which will help prevent automated brute-forcing.</p>

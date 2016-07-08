@@ -1,0 +1,200 @@
+---
+layout: post
+title: Build a Username List
+date: 2011-01-28 12:18:45.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Learn
+tags:
+- usernames
+- word list
+meta:
+  _edit_last: '20119316'
+  _wpas_skip_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1404775422;}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>I was recently in a situation where I needed to determine possible usernames through brute force but could not find a good list to use. The lists I found were related to typical Linux or Windows usernames used by the OS or one of its services. These lists did not contain the type of usernames you would normally see at a company, like first initial and last name (jsmith) or last name and first initial (smithj). Since I couldn't find a list like this I built one.</p>
+<p>First, I downloaded the <a href="http://www.census.gov/genealogy/www/data/2000surnames/Top1000.xls">top 1000 last names from the 2000 US census</a>. Then, I downloaded the most popular male and female first names from the <a href="http://www.census.gov/genealogy/www/data/1990surnames/index.html">1990 US census</a>. I could not find first name information for the 2000 census. Another source of popular first names is the Social Security office where you can search for the <a href="http://www.ssa.gov/oact/babynames/">most popular baby names</a> for a particular year.</p>
+<p>Next, I truncated the female list to the top 1000 names. I did not truncate the male list because it had about 1200 names. I then wrote a script to find the frequency of the first letter of each first name. I used Excel to combine the male and female frequencies and determine the most frequent first letter for both sets of names.</p>
+<p>First Letter Frequency Analysis<br />
+<table>
+<tr>
+<th>First Initial</th>
+<th>Female Frequency</th>
+<th>Male Frequency</th>
+<th>Combined Frequency</th>
+</tr>
+<tr>
+<td>M</td>
+<td>105</td>
+<td>88</td>
+<td>193</td>
+</tr>
+<tr>
+<td>J</td>
+<td>80</td>
+<td>100</td>
+<td>180</td>
+</tr>
+<tr>
+<td>C</td>
+<td>84</td>
+<td>87</td>
+<td>171</td>
+</tr>
+<tr>
+<td>A</td>
+<td>82</td>
+<td>87</td>
+<td>169</td>
+</tr>
+<tr>
+<td>L</td>
+<td>96</td>
+<td>71</td>
+<td>167</td>
+</tr>
+<tr>
+<td>D</td>
+<td>48</td>
+<td>97</td>
+<td>145</td>
+</tr>
+<tr>
+<td>R</td>
+<td>49</td>
+<td>94</td>
+<td>143</td>
+</tr>
+<tr>
+<td>E</td>
+<td>59</td>
+<td>74</td>
+<td>133</td>
+</tr>
+<tr>
+<td>S</td>
+<td>66</td>
+<td>64</td>
+<td>130</td>
+</tr>
+<tr>
+<td>B</td>
+<td>47</td>
+<td>71</td>
+<td>118</td>
+</tr>
+<tr>
+<td>T</td>
+<td>44</td>
+<td>53</td>
+<td>97</td>
+</tr>
+<tr>
+<td>K</td>
+<td>52</td>
+<td>36</td>
+<td>88</td>
+</tr>
+<tr>
+<td>G</td>
+<td>30</td>
+<td>50</td>
+<td>80</td>
+</tr>
+<tr>
+<td>H</td>
+<td>22</td>
+<td>46</td>
+<td>68</td>
+</tr>
+<tr>
+<td>F</td>
+<td>22</td>
+<td>36</td>
+<td>58</td>
+</tr>
+<tr>
+<td>N</td>
+<td>26</td>
+<td>29</td>
+<td>55</td>
+</tr>
+<tr>
+<td>W</td>
+<td>10</td>
+<td>44</td>
+<td>54</td>
+</tr>
+<tr>
+<td>P</td>
+<td>24</td>
+<td>22</td>
+<td>46</td>
+</tr>
+<tr>
+<td>V</td>
+<td>19</td>
+<td>17</td>
+<td>36</td>
+</tr>
+<tr>
+<td>I</td>
+<td>17</td>
+<td>18</td>
+<td>35</td>
+</tr>
+<tr>
+<td>O</td>
+<td>10</td>
+<td>20</td>
+<td>30</td>
+</tr>
+<tr>
+<td>Y</td>
+<td>5</td>
+<td>2</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Z</td>
+<td>1</td>
+<td>6</td>
+<td>7</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>1</td>
+<td>5</td>
+<td>6</td>
+</tr>
+<tr>
+<td>U</td>
+<td>1</td>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>X</td>
+<td>0</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>1000</td>
+<td>1219</td>
+<td>2219</td>
+</tr>
+</table>
+<p>Finally, I wrote a script to combine each of the top 1000 surnames with each of the top 10 first initials in both last name + first initial and first initial + last name format. I also created lists with the surname truncated at 6, 7 and 8 characters. Finally, I created lists in the format of first_name.last_name and last_name.first_name.</p>
+<p>The list of surnames, lists of first names, and the script to build the username files can be downloaded <a href="https://github.com/averagesecurityguy/credentials">here</a>. Let me know if you have any questions or need help with the scripts.</p></p>

@@ -1,0 +1,41 @@
+---
+layout: post
+title: Pwning a Splunk Server
+date: 2012-04-12 21:28:20.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Pentest
+- Research
+tags:
+- penetration testing
+- Splunk
+- Splunk vulnerability
+meta:
+  _edit_last: '20119316'
+  _wpas_done_linkedin: '1'
+  publicize_results: a:1:{s:7:"twitter";a:1:{i:244128388;a:2:{s:7:"user_id";s:13:"averagesecguy";s:7:"post_id";s:18:"190627455478931456";}}}
+  _wpas_done_twitter: '1'
+  _wpas_skip_648456: '1'
+  _wpas_skip_648455: '1'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<h3>Update</h3>
+<p><a href="https://twitter.com/marcwickenden" title="Marc Wickenden on Twitter">Marc Wickenden</a> also found this bug a while back and did an <a href="http://blog.7elements.co.uk/2012/11/splunk-with-great-power-comes-great-responsibility.html" title="Splunk vulnerability write up on 7elements blog">excellent write up</a> on it. He also built a <a href="http://www.metasploit.com/modules/exploit/multi/http/splunk_upload_app_exec" title="Splunk custom search app Metasploit module">metasploit module</a> to exploit the bug.</p>
+<p>Splunk has this nifty feature that allows you to upload custom applications that include Python scripts, which are used for custom searching. In Splunk Free this feature becomes a vulnerability because <a href="http://docs.splunk.com/Documentation/Splunk/latest/Admin/MoreaboutSplunkFree" title="More about Splunk Free">anyone can access the web interface without authenticating</a>. This means you can upload and execute arbitrary code in the context of the Splunk user. If the Splunk user has admin access to the server then the server can be completely compromised.</p>
+<p><strong>If you are using Splunk Free, make sure the web server is not running under an administrative account and if possible, configure a web server such as Apache or IIS to sit in front of Splunk and force users to authenticate.</strong> Here's an <a href="http://www.staze.org/proxy-splunk-behind-apache-2-2/" title="splunk apache proxy">article</a> showing how to do this with Apache.</p>
+<h3>The Rest of the Story</h3>
+<p>During a recent pentest I stumbled upon a Splunk server that allowed access to the administrative interface with no authentication. While trying to figure out how to run queries on the server I came across <a href="http://docs.splunk.com/Documentation/Splunk/latest/SearchReference/WriteaPythonsearchcommand" title="Splunk custom python search">this article</a>. The article says you can create a custom Python script to query data in Splunk. I already had a Python shell script, now I needed to figure out how to create a custom application.</p>
+<p>More searching turned up <a href="http://docs.splunk.com/Documentation/Splunk/latest/Developer/AppIntro" title="Creating custom Splunk apps">this article</a> and an example application on github. Splunk provides users with an example application called custom_search and in the bin directory you will find a usercount.py file. All I had to do was replace the contents of this file with my Python shell and I had a malicious application.</p>
+<p>To create the custom application, use git to clone the <a href="https://github.com/splunk/splunk-sdk-python/tree/master/examples/custom_search" title="Splunk example application on github">splunk-sdk-python repository</a>, then copy the custom_search directory to another location. Replace the contents of usercount.py with your Python script, make sure you inlcude the #! line. Next tar gzip the custom_search folder and use the management interface to upload an application from a file. Once the application is uploaded, you can launch it.<br />
+<img src="{{ site.baseurl }}/assets/splunk_custom_search.png" alt="Custom Splunk Search" /></p>
+<p>Once the application is running you can execute the custom search using the following command: <code>| usercount __EXECUTE__</code>. When the search executed my shell started and I used netcat to connect to it. This instance of Splunk was running as root, game over.<br />
+<img src="{{ site.baseurl }}/assets/splunk_root_access.png" alt="Splunk root access" /></p>
+<h3>Side Note</h3>
+<p>What I don't mention in this article is that it took me a few hours to go from identifying the Splunk server to executing code. I don't use Splunk and I am not familiar with how it works so I stumbled around for a long time and almost gave up number of times. If you are new to pentesting and are struggling, don't give up because your hard work will eventually pay off. </p>

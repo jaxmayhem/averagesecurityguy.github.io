@@ -1,0 +1,41 @@
+---
+layout: post
+title: Low Hanging Fruit
+date: 2012-07-05 15:02:56.000000000 -04:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Pentest
+tags:
+- Nessus
+- penetration testing
+- Pentesting
+- python
+meta:
+  _edit_last: '20119316'
+  _wpas_done_twitter: '1'
+  _wpas_skip_linkedin: '1'
+  reddit: a:2:{s:5:"count";i:0;s:4:"time";i:1402807587;}
+  _oembed_3e982d9df8db96c06ebd145c1c1be5d2: '{{unknown}}'
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>When I do internal penetration tests I often find the same easily exploitable vulnerabilities laying around the network. My personal favorites are MS08-067 (Yes, I still see it), Apache Tomcat default credentials, open network shares, and web management interfaces with default or no credentials. My typical workflow involves running a Nessus scan and then checking for these common vulnerabilities before moving on to other vulnerabilities identified by Nessus. I decided to write a Python script to automate this task for me. Lhf.py takes a single Nessus v2 XML file and prints a summary HTML file with all of the low hanging fruit found in the Nessus file. Currently, lhf.py checks for the following:</p>
+<ul>
+<li>User accounts available through Null Sessions</li>
+<li>MS08-067</li>
+<li>Open Windows Shares</li>
+<li>Open NFS Shares</li>
+<li>Anonymous FTP</li>
+<li>Default Apache Tomcat Credentials</li>
+<li>Default SNMP Community Strings</li>
+<li>Any Vulnerability with a Metasploit Exploit</li>
+<li>Web Servers</li>
+</ul>
+<p><a href="https://github.com/averagesecurityguy/scripts" title="Github Averagesecurityguy Scripts" target="_blank">lhf.py is available on Github.</a> </p>

