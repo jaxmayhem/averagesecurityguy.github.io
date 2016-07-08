@@ -18,8 +18,6 @@ Contact
 -------
 If you need a real world test of your information security controls please contact us today.
 
-ASG Consulting
-
-423.305.3700
-
+ASG Consulting  
+423.305.3700  
 info@asgconsulting.co
