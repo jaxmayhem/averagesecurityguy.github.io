@@ -1,15 +1,12 @@
 # Dependencies
-markdown:         redcarpet
 highlighter:      pygments
 
 # Permalinks
 permalink:        pretty
-#relative_permalinks: true
 
 # Setup
-title:            AverageSecurityGuy
-#tagline:          
-#description:      'A brazen two-column <a href="http://jekyllrb.com" target="_blank">Jekyll</a> theme that pairs a prominent sidebar with uncomplicated content. Made by <a href="https://twitter.com/mdo" target="_blank">@mdo</a>.'
+title:            ASGuy
+tagline:          'AverageSecurityGuy'
 url:              https://averagesecurityguy.github.io
 baseurl:          /
 
@@ -18,9 +15,3 @@ author:
   url:            https://twitter.com/averagesecguy
 
 paginate:         5
-
-# Custom vars
-version:          2.1.0
-
-github:
-  repo:           https://github.com/averagesecurityguy/averagesecurityguy.github.io
