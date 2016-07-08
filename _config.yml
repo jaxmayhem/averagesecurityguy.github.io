@@ -5,7 +5,7 @@ highlighter:      pygments
 permalink:        pretty
 
 # Setup
-title:            ASGuy
+title:            ASG
 tagline:          'AverageSecurityGuy'
 url:              https://averagesecurityguy.github.io
 baseurl:          /
