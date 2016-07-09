@@ -3,7 +3,6 @@ layout: post
 title: We've Lost Sight of the Basics
 ---
 
-<rant>
 I'm a penetration tester and I have a checklist that I use on just about every test I do. My checklist includes things like:
 
 * Scan the external network for open SMB ports.
@@ -20,5 +19,3 @@ Many of the common vulnerabilities I find can be found with free or cheap tools 
 It's been at least five years since I had to defend a network so maybe I'm out of touch but unless we find a way to fix these dumb mistakes and prevent them from happening again, we will never win the infosec war.
 
 Here's a presentation I did recently to help illustrate the point [You Will Get Owned in 2016](https://github.com/averagesecurityguy/presentations/blob/master/will_get_owned_2016.pdf)
-
-</rant>

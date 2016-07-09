@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Finding and Exploiting MongoDB
+title: Cracking MongoDB Passwords
 ---
 
 On a recent penetration test I came across a number of MongoDB servers that allowed unauthenticated access. Using this access, I was able to download the MongoDB user accounts and their associated password hashes. MongoDB uses two password hashing schemes. The first is called MONGODB-CR, which is a simple MD5 hash of the string username:mongo:password. This password hashing algorithm is no longer used and has been replaced by a much stronger password hashing algorithm based on SCRAM-SHA-1. When MongoDB introduced the SCRAM-SHA-1 algorithm they didn't update the older user accounts to use the new hashing algorithm so you will still find servers that use the older MONGODB-CR format.
