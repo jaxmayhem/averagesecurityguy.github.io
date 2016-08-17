@@ -1,6 +1,6 @@
 ---
 layout: post
-title: I Was a Junior
+title: I was a Junior
 ---
 
 ## In the beginning
