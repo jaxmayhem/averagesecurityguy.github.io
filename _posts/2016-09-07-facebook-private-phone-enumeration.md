@@ -3,7 +3,7 @@ layout: post
 title: Facebook Private Phone Number Enumeration
 ---
 
-I started playing around with the Facebook bug bounty a few weeks ago and submitted a few issues that I considered bugs but wasn't sure if Facebook would. I wanted to get an idea about what they considered a security/privacy issue and what they did not. Based on Facebook's bug bounty details posted at https://www.facebook.com/whitehat, vulnerabilities that reveal public information are not eligible for the bug bounty program. Public information includes your profile picture, username, ID, name, current cover photo, gender, and anything you've shared publicly.
+I started playing around with the Facebook bug bounty a few weeks ago and submitted a few issues that I considered bugs but wasn't sure if Facebook would. I wanted to get an idea about what they considered a security/privacy issue and what they did not. Based on Facebook's [bug bounty details](https://www.facebook.com/whitehat), vulnerabilities that reveal public information are not eligible for the bug bounty program. Public information includes your profile picture, username, ID, name, current cover photo, gender, and anything you've shared publicly.
 
 While playing around with the account recovery feature of Facebook I noted that you could enter either an email address or a phone number and it would return a list of users that are related to the information provided. This allows you to choose your account and continue the account recovery process. I decided to try a little experiment with my account created specifically for bug hunting. This account had no data associated with me except my email address. I entered my email address in the account recovery form and immediately found my account. This email address is my primary contact information so I can't make it non-public.
 
@@ -28,7 +28,7 @@ Their response was,
 
 Facebook has the final say in all bug bounty submissions and even though I was frustrated, I dropped it and asked for permission to disclose. Since Facebook does not consider this a security or privacy issue they granted permission.
 
-If you'd like to test this out yourself, add a phone number to your account and set the permissions to Only Me. You should then be able to logout and attempt an account recovery using the phone number you provided. If you'd like to try this at a larger scale you can use the proof of concept code available at https://github.com/averagesecurityguy/pocs/blob/master/fb_phone_enum.py.
+If you'd like to test this out yourself, add a phone number to your account and set the permissions to Only Me. You should then be able to logout and attempt an account recovery using the phone number you provided. If you'd like to try this at a larger scale you can use the proof of concept code on [GitHub](https://github.com/averagesecurityguy/pocs/blob/master/fb_phone_enum.py).
 
 Here's some sample output from the script:
 
