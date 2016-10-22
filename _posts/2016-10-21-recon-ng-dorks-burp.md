@@ -2,7 +2,7 @@
 layout: post
 title: Recon-ng + Google Dorks + Burp = ...
 ---
-The other day I asked on Twitter, what tools Blue Teams or Red Teams wished they had. I'll admit, it was selfish on my part because I really want to be able to build and sell a usable product. Anyway, @ethicalhack3r said he wanted a way to search for Google Dorks and get them into Burp to find interesting content. So I decided I'd take up the challenge.
+The other day I asked on Twitter, what tools Blue Teams or Red Teams wished they had. I'll admit, it was selfish on my part because I really want to be able to build and sell a usable product. Anyway, [@ethicalhack3r](https://twitter.com/ethicalhack3r) said he wanted a way to search for Google Dorks and get them into Burp to find interesting content. So I decided I'd take up the challenge.
 
 Sometimes, I like to reinvent the wheel because I feel like I can make a better wheel but I knew Recon-ng already had Google Dork searches built in and had a method for dealing with Google's CAPTCHAs. And, as much as I'd like to think I could make a better wheel than Recon-ng, I know I can't. So I figured the next best thing would be to build a report module that could take the URLs found using Google Dorks and send them to Burp, so that's exactly what I did.
 
