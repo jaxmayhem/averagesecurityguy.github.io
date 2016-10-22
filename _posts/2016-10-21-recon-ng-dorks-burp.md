@@ -6,9 +6,10 @@ The other day I asked on Twitter, what tools Blue Teams or Red Teams wished they
 
 Sometimes, I like to reinvent the wheel because I feel like I can make a better wheel but I knew Recon-ng already had Google Dork searches built in and had a method for dealing with Google's CAPTCHAs. And, as much as I'd like to think I could make a better wheel than Recon-ng, I know I can't. So I figured the next best thing would be to build a report module that could take the URLs found using Google Dorks and send them to Burp, so that's exactly what I did.
 
-When the recon/domains-vulnerabilities/ghdb module is run it uses a large number of Google Dorks from the Google Hacking Database to search a site for interesting content. When it finds matching URLs they are placed in the vulnerbilities database with the category 'Google Dorks'. Recon-ng can run direct queries on the database so I was able to search for all of the URLs where the category matched 'Google Dorks'. Once that was done, I used the request method to get each URL. The trick is to set the global PROXY value before running the report and then unset it after running the report.
+When the recon/domains-vulnerabilities/ghdb module is run it uses a large number of Google Dorks from the Google Hacking Database to search a site for interesting content. When it finds matching URLs they are placed in the vulnerbilities database with the category 'Google Dorks'. Recon-ng can run direct queries on the database so I was able to search for all of the URLs where the category matched 'Google Dorks'. Once that was done, I used the request method to get each URL. The trick to getting these URLs into Burp is to set the global PROXY value before running the report and then unset it after running the report.
 
 To use the new reporting module:
+
 1. Run the recon/domains-vulnerabilities/ghdb module and gather the dorks you want.
 2. Set the global proxy:
     1. Use the `back` command to leave the module context and enter the global context.
