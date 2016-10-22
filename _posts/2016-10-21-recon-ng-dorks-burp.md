@@ -24,6 +24,6 @@ To use the new reporting module:
     * Use the `back` command to leave the reporting module.
     * Use the `unset PROXY` command to unset the global proxy.
 
-Thanks to @ethicalhack3r for the idea and to @LaNMast3r for recon-ng and help writing the module.
+Thanks to (https://twitter.com/ethicalhack3r)[@ethicalhack3r] for the idea and to @LaNMast3r for recon-ng and help writing the module.
 
 
