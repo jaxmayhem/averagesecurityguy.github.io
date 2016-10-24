@@ -17,12 +17,13 @@ To use the new reporting module:
     * Use the `set PROXY http://<your_proxy_here>` command to set the global proxy
 
 3. Enter the proxifier reporting module using the command `use reporting/proxifier`.
-4. By default the module will find the vulnerability URLs with a category of 'Google Dorks' but any query that yields a list of URLs can be used.
+4. By default the module will find the vulnerability URLs with a category of 'Google Dorks' but any query that yields a list of URLs can be used. If you would like to use a different query that yields URLs then you can use the `set SOURCE query` command.
 5. Run the module with the `run` command.
 6. Unset the global proxy:
 
     * Use the `back` command to leave the reporting module.
     * Use the `unset PROXY` command to unset the global proxy.
+
 
 Thanks to [@ethicalhack3r](https://twitter.com/ethicalhack3r) for the idea and to [@LaNMast3r](https://twitter.com/LaNMaSteR53) for recon-ng and help writing the module.
 
