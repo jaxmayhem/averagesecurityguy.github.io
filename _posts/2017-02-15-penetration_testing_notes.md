@@ -1,6 +1,6 @@
 ---
 layout: post
-title: PTNotes: A Simple Pentest Note Taking Tool
+title: A Simple Pentest Note Taking Tool
 ---
 
 During penetration tests I often find myself making notes about hosts or about the engagement itself in a single text file called notes. Throughout the engagement, I refer to this file to see where I stand on the engagement. Some notes are about a compromised host such as how it was compromised and what data was gathered from it. Some notes are about general attacks such as SSH bruteforcing or directory busting and the successes and failures associated with those attacks.
