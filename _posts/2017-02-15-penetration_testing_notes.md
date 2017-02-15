@@ -9,15 +9,15 @@ In the past, I wrote a tool called Low Hanging Fruit, which parsed a Nessus file
 
 To use [PTNotes](https://github.com/averagesecurityguy/ptnotes), start by creating a new project and importing Nmap or Nessus data. Each time you import data, the data is analyzed for additional attack vectors.
 
-https://averagesecurityguy.github.io/assets/ptnotes_projects.jpg
+![PTNotes projects page](https://averagesecurityguy.github.io/assets/ptnotes_projects.jpg)
 
 Once you have imported data, you can view the project to see potential attack vectors and a summary of hosts and open ports. From the summary page you can view click on a host and see all of the imported Nessus and Nmap data for that host.
 
-https://averagesecurityguy.github.io/assets/ptnotes_summary.jpg
+![PTNotes project summary](https://averagesecurityguy.github.io/assets/ptnotes_summary.jpg)
 
 You can view an attack and see a list of hosts that may be vulnerable to that attack. You can also add any notes to the attack to document the hosts you have tested and what successes or failures you had.
 
-https://averagesecurityguy.github.io/assets/ptnotes_attack.jpg
+![PTNotes attack summary](https://averagesecurityguy.github.io/assets/ptnotes_attack.jpg)
 
 From the attack page, if you click on a host you can see the Nessus or Nmap output that caused the host to be flagged for the attack. If the host does not have a link then the attack was flagged because of its port and protocol.
 
