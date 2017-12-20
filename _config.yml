@@ -7,8 +7,6 @@ permalink:        pretty
 # Setup
 title:            "ASG Blog"
 description:      "AverageSecurityGuy"
-url:              "https://averagesecurityguy.github.io"
-baseurl:          ""
 
 author:
   name:           "Stephen Haywood"
