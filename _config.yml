@@ -5,13 +5,13 @@
 permalink:        pretty
 
 # Setup
-title:            ASG
-description:      'Average Security Guy'
-url:              https://averagesecurityguy.github.io
-baseurl:          /
+title:            "ASG Blog"
+description:      "AverageSecurityGuy"
+url:              "https://averagesecurityguy.github.io"
+baseurl:          "/"
 
 author:
-  name:           'Stephen Haywood'
-  url:            https://twitter.com/averagesecguy
+  name:           "Stephen Haywood"
+  url:            "https://twitter.com/averagesecguy"
 
 paginate:         5
